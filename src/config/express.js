@@ -17,7 +17,6 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(express.static(path.join(__dirname, "../uploads")));
-app.use(express.static(path.join(__dirname, "../../admin/static/css")));
 
 var corsOptions = {
   origin: '*',

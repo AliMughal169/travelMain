@@ -13,7 +13,6 @@ const flightsSchema = new mongoose.Schema({
   businessPrice:{type: Number,required: true , default:0},
   economyPrice:{type: Number,required: true , default:0},
   isFull:{type: Boolean,required: true},
-  price: {type: Number, default: 15}
 });
 module.exports =mongoose.model("Flight",flightsSchema)
 

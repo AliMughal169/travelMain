@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 const backendUrl = process.env.REACT_APP_BASE_URL;
-console.log(backendUrl)
 // react-bootstrap components
 import {
   Card,
@@ -13,19 +12,24 @@ import {
 } from "react-bootstrap";
 import { render } from "react-dom";
 import Swal from "sweetalert2";
-import Addflight from "./Addflight";
+import TicketDetail from "./TicketDetail";
 
 function TableList() {
   const [show,setShow]=useState(false)
   const handleShow = () => setShow(true);
   const [editData,setEditData]=useState('');
-  const [flightDetail,setFlightDetail]=useState([])
   const [ticketDetail,setTicketDetail]=useState([])
   
   const [ticketData,setTicketData]=useState([]);
   const [passData,setPassData]=useState([]);
   const [flightData,setFlightData]=useState([])
   
+  //appear notification
+  const notify=(place){
+  }
+  function refreshPage() {
+    window.location.reload(false);
+  }
      useEffect(() => {
         async function fetchTicktData()
         {
@@ -36,7 +40,7 @@ function TableList() {
         }
         async function fetchPassData()
         {
-          const response=await axios.get(`${backendUrl}v1/admin/passenger/findpassenger`).then((res)=>console.log(res));
+          const response=await axios.get(`${backendUrl}v1/admin/passenger/findpassenger`).then((res)=>setPassData(res.data.result));
           
         }
         async function fetchFlightData()
@@ -49,12 +53,11 @@ function TableList() {
         fetchFlightData()
         
      },[])
-     async function deleteflight(id) {
-        const response=await axios.delete(`${backendUrl}v1/admin/flights/`).then((res)=>console.log(res))
+     async function deleteTicket(id) {
+        const response=await axios.delete(`${backendUrl}v1/admin/tickets/deleteticket?_id=${id}`).then((res)=>console.log(res))
         
      }
      function alerted(id) {
-      console.log(flightData)
       Swal.fire({
         title: 'Are You Sure you want to Delete?',
         showCancelButton: true,
@@ -63,7 +66,7 @@ function TableList() {
         /* Read more about isConfirmed, isDenied below */
         
         if (result.isConfirmed) {
-          deleteflight(id)
+          deleteTicket(id)
           refreshPage()
         } else if (result.isDenied) {
           Swal.fire('Changes are not saved', '', 'info')
@@ -75,19 +78,54 @@ function TableList() {
       handleShow()
       
     }
-    function getflightdetail(id) {
+    const detailClick=(data)=>{
+    if (data)
+      {
+        setTicketDetail(data)
+        handleShow()
+      }
+      
+    }
+    const getflightdetail=(id,tag)=> {
+      
         for (let i=0 ; i<flightData.length ; i++)
         {
           if (flightData[i]._id==id)
           {
-            return flightData[i]
+            if (tag)
+            {
+              return flightData[i][tag]
+            }
+            else{
+              return flightData[i]
+            }
+          
+            
           }
         }
     }
+    const  getPassengerdetail=(id,tag)=> {
+      for (let i=0 ; i<passData.length ; i++)
+      {
+        if (passData[i]._id==id)
+        {
+          if (tag)
+          {
+            return passData[i][tag]
+          }
+          else 
+          {
+            return passData[i]
+          }
+        
+          
+        }
+      }
+  }
   return (
     <>
       
-    <Addflight show={show} setShow={setShow} data={editData} setEdit={setEditData}/>
+    <TicketDetail show={show} ticketDetail={ticketDetail} setShow={setShow} flightData={getflightdetail} passData={getPassengerdetail}/>
       <Container fluid>
         <Row>
           <Col md="12">
@@ -97,9 +135,7 @@ function TableList() {
                 <p className="card-category">
                   Here is a subtitle for this table
                 </p>
-                <Button variant="primary" onClick={handleShow} >
-                  Add Flight
-              </Button>
+                
                 
                 
               </Card.Header>
@@ -114,6 +150,7 @@ function TableList() {
                       <th className="border-0">Purchase Date</th>
                       <th className="border-0">Seat #</th>
                       <th className="border-0">Ticket Type</th>
+                      <th className="border-0">Class</th>
                       <th className="border-0">Price</th>
                    
                     </tr>
@@ -123,16 +160,19 @@ function TableList() {
                       ticketData.map((data,index)=>{
                         return(
                            <tr key={index}>
-                            <td></td>
+                            <td>{getPassengerdetail(data.passengerId,"firstName")}</td>
+                            <td>{getPassengerdetail(data.passengerId,"age")}</td>
+                            <td>{getflightdetail(data.flightId,"departureCity")}</td>
+                            <td>{getflightdetail(data.flightId,"arrivalCity")}</td>
+                             
                             <td>{data.purchaseDate}</td>
                             <td>{data.seatNumber}</td>
-                            <td>{data.flightId}</td>
                             
                             <td>{data.ticketType}</td>
                             <td>{data.class}</td>
                             <td>{data.price}</td>
                            
-                            <td><Button variant='success' onClick={()=>editflight(data)}> Detail</Button></td>
+                            <td><Button variant='success' onClick={()=>detailClick(data)}> Detail</Button></td>
                             
                             <td><Button variant='danger' onClick={()=>alerted(data._id)} > Delete</Button></td>
                             

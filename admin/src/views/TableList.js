@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 const backendUrl = process.env.REACT_APP_BASE_URL;
-console.log(backendUrl)
 // react-bootstrap components
 import {
   Card,

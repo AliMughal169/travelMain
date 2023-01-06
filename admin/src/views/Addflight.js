@@ -38,7 +38,6 @@ function Addflight({ show, setShow, data, setEdit }) {
   useEffect(() => {
     if (data) {
       setButtonText("Save changes")
-      setEdit('')
 
     }
   })
@@ -79,6 +78,8 @@ function Addflight({ show, setShow, data, setEdit }) {
           totalCapacity: postData.totalCapacity
         }).then((res) => console.log(res))
     }
+    setEdit('')
+
   }
   return (
     <>

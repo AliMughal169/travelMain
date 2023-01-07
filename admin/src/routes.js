@@ -24,6 +24,7 @@ import Typography from "views/Typography.js";
 import Icons from "views/Icons.js";
 import Notifications from "views/Notifications.js";
 import TicketList from "views/TicketsList.js"
+import HotelList from "views/HotelList.js"
 
 const dashboardRoutes = [
   {
@@ -96,6 +97,14 @@ const dashboardRoutes = [
     icon: "nc-icon nc-bell-55",
     showInSideBar: true,
     component: Notifications,
+    layout: "/admin"
+  },
+  {
+    path: "/HotelList",
+    name: "Hotel List",
+    icon: "nc-icon nc-bell-55",
+    showInSideBar: true,
+    component: HotelList,
     layout: "/admin"
   }
 ];

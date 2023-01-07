@@ -1,14 +1,15 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Container } from 'react-bootstrap';
+import { Col, Container } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+import moment from 'moment'
 const backendUrl = process.env.REACT_APP_BASE_URL;
-function Addflight({ show, setShow, data, setEdit }) {
+function Addflight({ show, setShow, data, setEdit,type,setnotifyData }) {
   console.log(data._id)
   let depDateTime = new Date(data.departureDateTime)
-
+  
   var postData = {
     _id:data._id,
     airlineName: "",
@@ -27,33 +28,39 @@ function Addflight({ show, setShow, data, setEdit }) {
     totalCapacity: 0
   }
   const handleChange = (event) => {
-    console.log(postData)
+   
+    console.log(event.target.value)
+    
+    const rand= moment().format();
+    console.log(rand)
     postData[event.target.name] = event.target.value
   }
-  let date = new Date(data.departureDateTime)
-  console.log(date.getHours() + ":" + date.getMinutes())
-  const [buttonText, setButtonText] = useState('Add Flight')
   const handleClose = () => setShow(false);
 
   useEffect(() => {
     if (data) {
-      setButtonText("Save changes")
-
+      
     }
-  })
+  },[])
   const addFlight = async () => {
-    console.log(postData._id)
-    if (buttonText == "Save changes") {
-      console.log(buttonText)
-    
+    if(!postData.departureDate || !postData.departureTime || ! postData.arrivalDate || !postData.arrivalTime)
+    {
+      setnotifyData({place:"tc", message:"Kindly Enter Correct Date And Time ", type:"success"})
+        
+      return
+    }
+    console.log(moment(postData.departureDate+'T'+postData.departureTime).format())
+    console.log(postData)
+    if (type == "Save Changes") {
+      
       const res= await axios.put(`${backendUrl}v1/admin/flights/updateflight?_id=${postData._id}`,{
         airlineName: postData.airlineName,
         arrivalCity: postData.arrivalCity,
-        arrivalDateTime: postData.arrivalDate + "T" + postData.arrivalTime,
+        arrivalDateTime: moment(postData.arrivalDate+'T'+postData.arrivalTime).format(),
         businessCapacity: postData.businessCapacity,
         businessPrice: postData.businessPrice,
         departureCity: postData.departureCity,
-        departureDateTime: postData.departureDate + "T" + postData.departureTime,
+        departureDateTime:moment(postData.departureDate+'T'+postData.departureTime).format(),
         economyCapacity: postData.economyCapacity,
         economyPrice: postData.economyPrice,
         flightNumber: postData.flightNumber,
@@ -62,21 +69,21 @@ function Addflight({ show, setShow, data, setEdit }) {
       }).then((res) => console.log(res))
     }
     else {
-      const response = await axios.post(`${backendUrl}v1/admin/flights/addflight`,
-        {
-          airlineName: postData.airlineName,
-          arrivalCity: postData.arrivalCity,
-          arrivalDateTime: postData.arrivalDate + "T" + postData.arrivalTime,
-          businessCapacity: postData.businessCapacity,
-          businessPrice: postData.businessPrice,
-          departureCity: postData.departureCity,
-          departureDateTime: postData.departureDate + "T" + postData.departureTime,
-          economyCapacity: postData.economyCapacity,
-          economyPrice: postData.economyPrice,
-          flightNumber: postData.flightNumber,
-          isFull: postData.isFull ? true : false,
-          totalCapacity: postData.totalCapacity
-        }).then((res) => console.log(res))
+      // const response = await axios.post(`${backendUrl}v1/admin/flights/addflight`,
+      //   {
+      //     airlineName: postData.airlineName,
+      //     arrivalCity: postData.arrivalCity,
+      //     arrivalDateTime: postData.arrivalDate + "T" + postData.arrivalTime,
+      //     businessCapacity: postData.businessCapacity,
+      //     businessPrice: postData.businessPrice,
+      //     departureCity: postData.departureCity,
+      //     departureDateTime: postData.departureDate + "T" + postData.departureTime,
+      //     economyCapacity: postData.economyCapacity,
+      //     economyPrice: postData.economyPrice,
+      //     flightNumber: postData.flightNumber,
+      //     isFull: postData.isFull ? true : false,
+      //     totalCapacity: postData.totalCapacity
+      //   }).then((res) => console.log(res))
     }
     setEdit('')
 
@@ -91,9 +98,11 @@ function Addflight({ show, setShow, data, setEdit }) {
         <Modal.Body>
           <Form className=' d-lg-flex  ' >
             <Container className=' p-0 mx-2  '>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Group  className="mb-3" controlId="exampleForm.ControlInput1">
                 <Form.Label>Flight Number</Form.Label>
                 <Form.Control
+                  required
+                  
                   size='lg'
                   type="text"
                   name='flightNumber'
@@ -124,6 +133,7 @@ function Addflight({ show, setShow, data, setEdit }) {
                   type="date"
                   size='lg'
                   onChange={handleChange}
+                  required
                   name='departureDate'
                   defaultValue={data ? data.departureDateTime.split('T', 1) : ''}
                   autoFocus
@@ -136,6 +146,7 @@ function Addflight({ show, setShow, data, setEdit }) {
                   type="time"
                   size='lg'
                   onChange={handleChange}
+                  required
                   name="departureTime"
                   defaultValue={data ? depDateTime.getHours() + ":" + depDateTime.getMinutes() : ''}
 
@@ -206,6 +217,7 @@ function Addflight({ show, setShow, data, setEdit }) {
                 <Form.Label>Arrival Date</Form.Label>
                 <Form.Control
                   type="date"
+                  required
                   size='lg'
                   name='arrivalDate'
                   defaultValue={data ? data.arrivalDateTime.split('T', 1) : ''}
@@ -213,11 +225,12 @@ function Addflight({ show, setShow, data, setEdit }) {
                   autoFocus
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Group  className="mb-3" controlId="exampleForm.ControlInput1">
                 <Form.Label>Arrival Time</Form.Label>
                 <Form.Control
                   type="time"
                   size='lg'
+                  required
                   name='arrivalTime'
                   onChange={handleChange}
                   defaultValue={data ? depDateTime.getHours() + ":" + depDateTime.getMinutes() : ''}
@@ -266,11 +279,14 @@ function Addflight({ show, setShow, data, setEdit }) {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={()=>{
+            setEdit('')
+            handleClose()
+            }}>
             Close
           </Button>
           <Button variant="primary" onClick={() => addFlight()}>
-            {buttonText}
+            {type}
           </Button>
         </Modal.Footer>
       </Modal>

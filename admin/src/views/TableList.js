@@ -13,12 +13,19 @@ import {
 import { render } from "react-dom";
 import Swal from "sweetalert2";
 import Addflight from "./Addflight";
+import moment from "moment";
+import NotificationAlert from "react-notification-alert";
+import Notify from "./notify";
 
 function TableList() {
+  const [type,setType]=useState('')
   const [show,setShow]=useState(false)
   const handleShow = () => setShow(true);
   const [editData,setEditData]=useState('');
   const [data,setdata]=useState([]);
+  const notificationAlertRef = React.useRef(null);
+  const [notifyData,setnotifyData]=useState('');
+  
      useEffect(() => {
         async function fetchdata()
         {
@@ -50,24 +57,31 @@ function TableList() {
     }
     function editflight(info) {
       setEditData(info)
+      setType("Save Changes")
       handleShow()
       
     }
      
   return (
     <>
-      
-    <Addflight show={show} setShow={setShow} data={editData} setEdit={setEditData}/>
+      {
+        notifyData?<Notify option={notifyData} setoption={setnotifyData} notificationAlertRef={notificationAlertRef}></Notify>:''
+    }
+    <NotificationAlert ref={notificationAlertRef} />
+    <Addflight show={show} setShow={setShow} data={editData} setEdit={setEditData} setnotifyData={setnotifyData} type={type}/>
       <Container fluid>
         <Row>
           <Col md="12">
             <Card className="strpied-tabled-with-hover">
               <Card.Header>
-                <Card.Title as="h4">List of Items</Card.Title>
+                <Card.Title as="h4">Flight List</Card.Title>
                 <p className="card-category">
                   Here is a subtitle for this table
                 </p>
-                <Button variant="primary" onClick={handleShow} >
+                <Button variant="primary" onClick={()=>{
+                  setType("Add Flight")
+                  handleShow()
+                  }} >
                   Add Flight
               </Button>
                 
@@ -101,7 +115,10 @@ function TableList() {
                             <td>{dat.airlineName}</td>
                             <td>{dat.departureCity}</td>
                             <td>{dat.arrivalCity}</td>
-                            <td>{dat.departureDateTime}</td>
+                            {/* <td>{dat.departureDateTime}</td> */}
+                            
+                            <td>{moment(dat.departureDateTime).format("DD MM YYYY hh:mm")}</td>
+
                             <td>{dat.arrivalDateTime}</td>
                             <td>{dat.businessPrice}</td>
                             <td>{dat.economyPrice}</td>

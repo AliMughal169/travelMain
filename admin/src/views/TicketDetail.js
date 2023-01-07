@@ -9,7 +9,7 @@ function TicketDetail({show ,setShow,flightData,ticketDetail,passData}) {
           size='lg'
           className="  modal-primary"
           show={show}
-          onHide={() => setShowModal(false)}
+          onHide={() => setShow(false)}
         >
           <Modal.Header className="  justify-content-center">
             <div className="modal-profile">

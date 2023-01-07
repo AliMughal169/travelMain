@@ -4,11 +4,13 @@ import axios from "axios";
 import Swal from "sweetalert2";
 const backendUrl = process.env.REACT_APP_BASE_URL;
 import AddHotel from './AddHotel'
+import NotificationAlert from "react-notification-alert";
 
 // react-bootstrap components
 import { Card, Table, Container, Row, Col, Button } from "react-bootstrap";
 
 function HotelList() {
+    const [type, setType] = useState('');
     const [post, setpost] = useState([]);
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
@@ -41,8 +43,9 @@ function HotelList() {
         });
     }
     function editflight(info) {
-        console.log(info)
+        //console.log(info)
         setEditData(info)
+        setType('Save changes')
         handleShow()
 
     }
@@ -54,14 +57,17 @@ function HotelList() {
 
     return (
         <>
-            <AddHotel show={show} setShow={setShow} data={editData} setEdit={setEditData} />
+            <AddHotel show={show} setShow={setShow} data={editData} setEdit={setEditData} type={type} />
             <Container fluid>
                 <Row>
                     <Col md="12">
                         <Card className="strpied-tabled-with-hover">
                             <Card.Header>
                                 <Card.Title as="h4">List of Hotels</Card.Title>
-                                <Button variant="primary" onClick={handleShow} >
+                                <Button variant="primary" onClick={() => {
+                                    setType('Add hotel')
+                                    handleShow()
+                                }} >
                                     Add Hotel
                                 </Button>
                             </Card.Header>
@@ -98,8 +104,12 @@ function HotelList() {
                                                         <td>{data.stars}</td>
                                                         <td>
                                                             <Button style={{ borderColor: "green" }}
-                                                                onClick={() => editflight(data)}>
-                                                                {" "}
+                                                                onClick={() => {
+                                                                    //setType('Save changes')
+                                                                    editflight(data)
+                                                                }
+                                                                }>
+
                                                                 Edit
                                                             </Button>
                                                         </td>
@@ -108,7 +118,7 @@ function HotelList() {
                                                                 style={{ borderColor: "red" }}
                                                                 onClick={() => alerted(data._id)}
                                                             >
-                                                                {" "}
+
                                                                 Delete
                                                             </Button>
                                                         </td>

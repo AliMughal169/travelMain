@@ -5,7 +5,10 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 const backendUrl = process.env.REACT_APP_BASE_URL;
-function AddHotel({ show, setShow, data, setEdit }) {
+
+
+function AddHotel({ show, setShow, data, setEdit, type }) {
+    const [refresh, setRefresh] = useState(false);
     // console.log(data._id)
 
     var postData = {
@@ -22,19 +25,26 @@ function AddHotel({ show, setShow, data, setEdit }) {
 
     }
 
-    const [buttonText, setButtonText] = useState('Add Hotel')
-    const handleClose = () => setShow(false);
+
+    const handleClose = () => {
+        setEdit('')
+        setShow(false);
+    }
 
     useEffect(() => {
-        if (data) {
-            setButtonText("Save changes")
-        }
-    })
+        //   setRefresh(!refresh)
+    }, [])
     const addHotel = async () => {
         console.log(`id im add hote ${data._id}`)
-        if (buttonText == "Save changes") {
-            console.log(buttonText)
+        if (type == "Save changes") {
+
             // console.log(data._id, data.hotelName, data.address, data.totalRooms, data.stars, data.isFull)
+            // postData.hotelName = data.hotelName,
+            //     postData.address = data.address,
+            //     postData.totalRooms = data.totalRooms,
+            //     postData.stars = data.stars,
+            //     postData.isFull = data.isFull ? 1 : 0
+
 
 
             const res = await axios.put(`${backendUrl}v1/admin/hotellist/updateHotel?_id=${postData._id}`, {
@@ -45,7 +55,8 @@ function AddHotel({ show, setShow, data, setEdit }) {
                 isFull: postData.isFull ? 1 : 0
 
             }).then((res) => console.log(res))
-            //console.log(postData._id, postData.hotelName, postData.address, postData.totalRooms, postData.stars, postData.isFull)
+            console.log(postData._id, postData.hotelName, postData.address, postData.totalRooms, postData.stars, postData.isFull)
+            //setRefresh(!refresh)
 
 
 
@@ -62,10 +73,11 @@ function AddHotel({ show, setShow, data, setEdit }) {
                     isFull: postData.isFull ? 1 : 0
 
                 }).then((res) => console.log(res))
+            //setRefresh(!refresh)
 
         }
 
-
+        setEdit('');
 
     }
     return (
@@ -119,10 +131,7 @@ function AddHotel({ show, setShow, data, setEdit }) {
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                                 <Form.Label>Stars</Form.Label>
                                 <Form.Control
-                                    type="number"
-                                    size='lg'
-                                    onChange={handleChange}
-                                    name="stars"
+                                    type="number" setRefresh
                                     defaultValue={data ? data.stars : ''}
 
                                     autoFocus
@@ -147,11 +156,19 @@ function AddHotel({ show, setShow, data, setEdit }) {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
+                    <Button variant="secondary" onClick={() => {
+                        handleClose()
+                    }}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={() => addHotel()}>
-                        {buttonText}
+                    <Button variant="primary" onClick={() => {
+
+                        addHotel()
+                        // setRefresh(!refresh)
+                        handleClose()
+
+                    }}>
+                        {type}
                     </Button>
                 </Modal.Footer>
             </Modal>

@@ -36,8 +36,9 @@ exports.updateHotel = async (req, res, next) => {
     const query = req.query
     const payload = req.body;
     console.log(query)
-    let result = await hotels.updateOne(query.payload);
-    res.status(200).send({ status: true, message: "Hotel Updated Successfully" })
+    console.log(payload)
+    let result = await hotels.updateOne(query, payload);
+    res.status(200).send({ status: true, message: "Hotel Updated Successfully", result })
 }
 
 exports.deleteHotel = async (req, res, next) => {

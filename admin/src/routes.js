@@ -24,11 +24,8 @@ import Typography from "views/Typography.js";
 import Icons from "views/Icons.js";
 import Notifications from "views/Notifications.js";
 import TicketList from "views/TicketsList.js"
-<<<<<<< HEAD
-import HotelList from "views/HotelList.js"
-=======
 import HotelList from "views/HotelList";
->>>>>>> 50527946c756357fcaaebc7928a3768807e8c6f5
+import BookedHotels from "views/BookedHotels"
 
 const dashboardRoutes = [
   {
@@ -80,6 +77,14 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
+    path: "/bookedHotels ",
+    name: "Booked Hotels",
+    icon: "nc-icon nc-money-coins",
+    component: BookedHotels,
+    showInSideBar: true,
+    layout: "/admin"
+  },
+  {
     path: "/create",
     name: "Create",
     icon: "nc-icon nc-notes",
@@ -110,15 +115,8 @@ const dashboardRoutes = [
     showInSideBar: true,
     component: Notifications,
     layout: "/admin"
-  },
-  {
-    path: "/HotelList",
-    name: "Hotel List",
-    icon: "nc-icon nc-bell-55",
-    showInSideBar: true,
-    component: HotelList,
-    layout: "/admin"
   }
+
 ];
 
 export default dashboardRoutes;

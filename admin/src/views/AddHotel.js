@@ -5,20 +5,37 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 const backendUrl = process.env.REACT_APP_BASE_URL;
+// import NotificationAlert from "react-notification-alert";
 
 
 function AddHotel({ show, setShow, data, setEdit, type }) {
+    // const [notifyData, setnotifyData] = useState('');
     const [refresh, setRefresh] = useState(false);
-    // console.log(data._id)
 
-    var postData = {
-        _id: data._id,
-        hotelName: "",
-        address: "",
-        totalRooms: "",
-        stars: 0,
-        isFull: false,
-    }
+
+    const [post, setPost] = useState([])
+    //     _id: data._id,
+    //     hotelName: "",
+    //     address: "",
+    //     totalRooms: "",
+    //     stars: 0,
+    //     isFull: false,
+    // }
+
+    const [postData, setPostData] = useState([
+        {
+            _id: data._id,
+            hotelName: data.hotelName,
+            address: data.address,
+            totalRooms: data.totalRooms,
+            stars: data.stars,
+            isFull: data.isFull,
+        }
+    ])
+    useEffect(() => {
+        setPostData(data)
+        //setPost(data)
+    })
     const handleChange = (event) => {
         console.log(postData._id)
         postData[event.target.name] = event.target.value
@@ -31,28 +48,17 @@ function AddHotel({ show, setShow, data, setEdit, type }) {
         setShow(false);
     }
 
-    useEffect(() => {
-        //   setRefresh(!refresh)
-    }, [])
+
     const addHotel = async () => {
         console.log(`id im add hote ${data._id}`)
         if (type == "Save changes") {
-
-            // console.log(data._id, data.hotelName, data.address, data.totalRooms, data.stars, data.isFull)
-            // postData.hotelName = data.hotelName,
-            //     postData.address = data.address,
-            //     postData.totalRooms = data.totalRooms,
-            //     postData.stars = data.stars,
-            //     postData.isFull = data.isFull ? 1 : 0
-
-
 
             const res = await axios.put(`${backendUrl}v1/admin/hotellist/updateHotel?_id=${postData._id}`, {
                 hotelName: postData.hotelName,
                 address: postData.address,
                 totalRooms: postData.totalRooms,
                 stars: postData.stars,
-                isFull: postData.isFull ? 1 : 0
+                isFull: postData.isFull ? true : false
 
             }).then((res) => console.log(res))
             console.log(postData._id, postData.hotelName, postData.address, postData.totalRooms, postData.stars, postData.isFull)
@@ -66,11 +72,11 @@ function AddHotel({ show, setShow, data, setEdit, type }) {
 
             const response = await axios.post(`${backendUrl}v1/admin/hotellist/addHotel`,
                 {
-                    hotelName: postData.hotelName,
-                    address: postData.address,
-                    totalRooms: postData.totalRooms,
-                    stars: postData.stars,
-                    isFull: postData.isFull ? 1 : 0
+                    hotelName: post.hotelName,
+                    address: post.address,
+                    totalRooms: post.totalRooms,
+                    stars: post.stars,
+                    isFull: post.isFull ? 1 : 0
 
                 }).then((res) => console.log(res))
             //setRefresh(!refresh)
@@ -82,6 +88,12 @@ function AddHotel({ show, setShow, data, setEdit, type }) {
     }
     return (
         <>
+            {/* {
+                notifyData ? <Notify option={notifyData} setoption={setnotifyData} notificationAlertRef={notificationAlertRef}></Notify> : ''
+            }
+            <NotificationAlert ref={notificationAlertRef} />
+            <BookedDetails show={show} setShow={setShow} guestData={hotelDetail} />
+            <AddHotel show={show} setShow={setShow} data={editData} setEdit={setEditData} type={type} /> */}
 
             <Modal show={show} size="lg" onHide={handleClose} >
                 <Modal.Header closeButton>

@@ -18,19 +18,22 @@ import NotificationAlert from "react-notification-alert";
 import Notify from "./notify";
 
 function TableList() {
-<<<<<<< HEAD
+  const [type, setType] = useState('')
   const [show, setShow] = useState(false)
   const handleShow = () => setShow(true);
   const [editData, setEditData] = useState('');
   const [data, setdata] = useState([]);
+  const notificationAlertRef = React.useRef(null);
+  const [notifyData, setnotifyData] = useState('');
+
   useEffect(() => {
     async function fetchdata() {
       console.log(backendUrl)
       const response = await axios.get(`${backendUrl}v1/admin/flights/allflights`).then((res) => setdata(res.data.result));
     }
-    fetchdata();
+    fetchdata()
 
-  }, []);
+  }, [])
   async function deleteflight(id) {
     const response = await axios.delete(`${backendUrl}v1/admin/flights/deleteflight?_id=${id}`).then((res) => console.log(res))
 
@@ -53,67 +56,18 @@ function TableList() {
   }
   function editflight(info) {
     setEditData(info)
+    setType("Save Changes")
     handleShow()
 
   }
 
   return (
     <>
-
-      <Addflight show={show} setShow={setShow} data={editData} setEdit={setEditData} />
-=======
-  const [type,setType]=useState('')
-  const [show,setShow]=useState(false)
-  const handleShow = () => setShow(true);
-  const [editData,setEditData]=useState('');
-  const [data,setdata]=useState([]);
-  const notificationAlertRef = React.useRef(null);
-  const [notifyData,setnotifyData]=useState('');
-  
-     useEffect(() => {
-        async function fetchdata()
-        {
-          console.log(backendUrl)
-          const response=await  axios.get(`${backendUrl}v1/admin/flights/allflights`).then((res)=>setdata(res.data.result));
-        }
-        fetchdata()
-        
-     },[])
-     async function deleteflight(id) {
-        const response=await axios.delete(`${backendUrl}v1/admin/flights/deleteflight?_id=${id}`).then((res)=>console.log(res))
-        
-     }
-     function alerted(id) {
-      Swal.fire({
-        title: 'Are You Sure you want to Delete?',
-        showCancelButton: true,
-        confirmButtonText: 'Delete',
-      }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
-        
-        if (result.isConfirmed) {
-          deleteflight(id)
-          refreshPage()
-        } else if (result.isDenied) {
-          Swal.fire('Changes are not saved', '', 'info')
-        }
-      })
-    }
-    function editflight(info) {
-      setEditData(info)
-      setType("Save Changes")
-      handleShow()
-      
-    }
-     
-  return (
-    <>
       {
-        notifyData?<Notify option={notifyData} setoption={setnotifyData} notificationAlertRef={notificationAlertRef}></Notify>:''
-    }
-    <NotificationAlert ref={notificationAlertRef} />
-    <Addflight show={show} setShow={setShow} data={editData} setEdit={setEditData} setnotifyData={setnotifyData} type={type}/>
->>>>>>> 50527946c756357fcaaebc7928a3768807e8c6f5
+        notifyData ? <Notify option={notifyData} setoption={setnotifyData} notificationAlertRef={notificationAlertRef}></Notify> : ''
+      }
+      <NotificationAlert ref={notificationAlertRef} />
+      <Addflight show={show} setShow={setShow} data={editData} setEdit={setEditData} setnotifyData={setnotifyData} type={type} />
       <Container fluid>
         <Row>
           <Col md="12">
@@ -123,10 +77,10 @@ function TableList() {
                 <p className="card-category">
                   Here is a subtitle for this table
                 </p>
-                <Button variant="primary" onClick={()=>{
+                <Button variant="primary" onClick={() => {
                   setType("Add Flight")
                   handleShow()
-                  }} >
+                }} >
                   Add Flight
                 </Button>
 
@@ -161,7 +115,7 @@ function TableList() {
                             <td>{dat.departureCity}</td>
                             <td>{dat.arrivalCity}</td>
                             {/* <td>{dat.departureDateTime}</td> */}
-                            
+
                             <td>{moment(dat.departureDateTime).format("DD MM YYYY hh:mm")}</td>
 
                             <td>{dat.arrivalDateTime}</td>

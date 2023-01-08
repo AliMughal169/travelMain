@@ -10,11 +10,13 @@ import NotificationAlert from "react-notification-alert";
 import { Card, Table, Container, Row, Col, Button } from "react-bootstrap";
 
 function HotelList() {
+    const [notifyData, setnotifyData] = useState('');
     const [type, setType] = useState('');
     const [post, setpost] = useState([]);
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const [editData, setEditData] = useState("");
+    const [refresh, setRefresh] = useState(false);
     useEffect(() => {
         fetchPost();
     }, []);
@@ -53,10 +55,17 @@ function HotelList() {
     async function Delete(lastId) {
         console.log(lastId)
         let response = await axios.delete(`${backendUrl}v1/admin/hotellist/deleteHotel/?_id=${lastId}`).then((res) => console.log(res));
+        //setRefresh(!refresh)
+
     }
 
     return (
         <>
+            {/* {
+                notifyData ? <Notify option={notifyData} setoption={setnotifyData} notificationAlertRef={notificationAlertRef}></Notify> : ''
+            }
+            <NotificationAlert ref={notificationAlertRef} />
+            <BookedDetails show={show} setShow={setShow} guestData={hotelDetail} /> */}
             <AddHotel show={show} setShow={setShow} data={editData} setEdit={setEditData} type={type} />
             <Container fluid>
                 <Row>

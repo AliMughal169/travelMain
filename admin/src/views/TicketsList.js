@@ -13,25 +13,22 @@ import {
 import { render } from "react-dom";
 import Swal from "sweetalert2";
 import TicketDetail from "./TicketDetail";
+import Notify from './notify'
+import NotificationAlert from "react-notification-alert";
 
 function TableList() {
   const [show, setShow] = useState(false)
   const handleShow = () => setShow(true);
-  const [editData, setEditData] = useState('');
-  const [ticketDetail, setTicketDetail] = useState([]);
-
+  const [notifyData, setnotifyData] = useState('');
+  const [ticketDetail, setTicketDetail] = useState(false)
+  const [reload, setReload] = useState(false)
   const [ticketData, setTicketData] = useState([]);
   const [passData, setPassData] = useState([]);
   const [flightData, setFlightData] = useState([])
+  const notificationAlertRef = React.useRef(null);
 
-  //appear notification
-  // const notify  (place)
-  // {
 
-  // }
-  function refreshPage() {
-    window.location.reload(false);
-  }
+
   useEffect(() => {
     async function fetchTicktData() {
       const response = await axios.get(`${backendUrl}v1/admin/tickets/alltickets`).then((res) => setTicketData(res.data.result));
@@ -51,9 +48,12 @@ function TableList() {
     fetchPassData()
     fetchFlightData()
 
-  }, [])
+  }, [reload])
   async function deleteTicket(id) {
     const response = await axios.delete(`${backendUrl}v1/admin/tickets/deleteticket?_id=${id}`).then((res) => console.log(res))
+    setReload(!reload)
+    setnotifyData({ place: "tc", message: `deleted id : ${id} successfully`, type: "success" })
+
 
   }
   function alerted(id) {
@@ -66,21 +66,17 @@ function TableList() {
 
       if (result.isConfirmed) {
         deleteTicket(id)
-        refreshPage()
       } else if (result.isDenied) {
         Swal.fire('Changes are not saved', '', 'info')
       }
     })
   }
-  function editflight(info) {
-    setEditData(info)
-    handleShow()
 
-  }
   const detailClick = (data) => {
     if (data) {
       setTicketDetail(data)
       handleShow()
+
     }
 
   }
@@ -115,14 +111,17 @@ function TableList() {
   }
   return (
     <>
-
+      {
+        notifyData ? <Notify option={notifyData} setoption={setnotifyData} notificationAlertRef={notificationAlertRef}></Notify> : ''
+      }
+      <NotificationAlert ref={notificationAlertRef} />
       <TicketDetail show={show} ticketDetail={ticketDetail} setShow={setShow} flightData={getflightdetail} passData={getPassengerdetail} />
       <Container fluid>
         <Row>
           <Col md="12">
             <Card className="strpied-tabled-with-hover">
               <Card.Header>
-                <Card.Title as="h4">List of Items</Card.Title>
+                <Card.Title as="h4">Ticket List   </Card.Title>
                 <p className="card-category">
                   Here is a subtitle for this table
                 </p>
@@ -182,4 +181,4 @@ function TableList() {
   );
 }
 
-export default TableList;
+export default TableList

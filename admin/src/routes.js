@@ -24,7 +24,11 @@ import Typography from "views/Typography.js";
 import Icons from "views/Icons.js";
 import Notifications from "views/Notifications.js";
 import TicketList from "views/TicketsList.js"
+<<<<<<< HEAD
 import HotelList from "views/HotelList.js"
+=======
+import HotelList from "views/HotelList";
+>>>>>>> 50527946c756357fcaaebc7928a3768807e8c6f5
 
 const dashboardRoutes = [
   {
@@ -64,6 +68,14 @@ const dashboardRoutes = [
     name: "Bokking List",
     icon: "nc-icon nc-money-coins",
     component: TicketList,
+    showInSideBar: true,
+    layout: "/admin"
+  },
+  {
+    path: "/hotelList ",
+    name: "Hotel List",
+    icon: "nc-icon nc-money-coins",
+    component: HotelList,
     showInSideBar: true,
     layout: "/admin"
   },

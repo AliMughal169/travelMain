@@ -6,12 +6,9 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import moment from 'moment'
 const backendUrl = process.env.REACT_APP_BASE_URL;
-function Addflight({ show, setShow, data, setEdit,type,setnotifyData }) {
-  console.log(data._id)
-  let depDateTime = new Date(data.departureDateTime)
-  
+function Addflight({ show, setShow, data, setEdit,type,setnotifyData,reload,setReload }) {
+  const editId=data._id
   var postData = {
-    _id:data._id,
     airlineName: "",
     arrivalCity: "",
     arrivalDate: "",
@@ -28,32 +25,41 @@ function Addflight({ show, setShow, data, setEdit,type,setnotifyData }) {
     totalCapacity: 0
   }
   const handleChange = (event) => {
-   
-    console.log(event.target.value)
     
-    const rand= moment().format();
-    console.log(rand)
     postData[event.target.name] = event.target.value
   }
   const handleClose = () => setShow(false);
 
   useEffect(() => {
     if (data) {
-      
+      postData.airlineName=data.airlineName
+      postData.flightNumber=data.flightNumber
+      postData.arrivalCity=data.arrivalCity
+      postData.arrivalDate=moment(data.arrivalDateTime).format('YYYY-MM-DD')
+      postData.arrivalTime=moment(data.arrivalDateTime).format('hh:mm')
+      postData.departureDate=moment(data.departureDateTime).format('YYYY-MM-DD')
+      postData.departureTime=moment(data.departureDateTime).format('hh:mm')
+      postData.businessCapacity=data.businessCapacity
+      postData.economyCapacity=data.economyCapacity
+      postData.economyPrice=data.economyPrice
+      postData.isFull=data.isFull
+      postData.departureCity=data.departureCity
+      postData.totalCapacity=data.totalCapacity
     }
-  },[])
+  })
   const addFlight = async () => {
+    console.log(postData)
     if(!postData.departureDate || !postData.departureTime || ! postData.arrivalDate || !postData.arrivalTime)
     {
+      console.log("somthing is")
       setnotifyData({place:"tc", message:"Kindly Enter Correct Date And Time ", type:"success"})
         
       return
     }
     console.log(moment(postData.departureDate+'T'+postData.departureTime).format())
-    console.log(postData)
     if (type == "Save Changes") {
       
-      const res= await axios.put(`${backendUrl}v1/admin/flights/updateflight?_id=${postData._id}`,{
+      const res= await axios.put(`${backendUrl}v1/admin/flights/updateflight?_id=${editId}`,{
         airlineName: postData.airlineName,
         arrivalCity: postData.arrivalCity,
         arrivalDateTime: moment(postData.arrivalDate+'T'+postData.arrivalTime).format(),
@@ -69,24 +75,25 @@ function Addflight({ show, setShow, data, setEdit,type,setnotifyData }) {
       }).then((res) => console.log(res))
     }
     else {
-      // const response = await axios.post(`${backendUrl}v1/admin/flights/addflight`,
-      //   {
-      //     airlineName: postData.airlineName,
-      //     arrivalCity: postData.arrivalCity,
-      //     arrivalDateTime: postData.arrivalDate + "T" + postData.arrivalTime,
-      //     businessCapacity: postData.businessCapacity,
-      //     businessPrice: postData.businessPrice,
-      //     departureCity: postData.departureCity,
-      //     departureDateTime: postData.departureDate + "T" + postData.departureTime,
-      //     economyCapacity: postData.economyCapacity,
-      //     economyPrice: postData.economyPrice,
-      //     flightNumber: postData.flightNumber,
-      //     isFull: postData.isFull ? true : false,
-      //     totalCapacity: postData.totalCapacity
-      //   }).then((res) => console.log(res))
+      const response = await axios.post(`${backendUrl}v1/admin/flights/addflight`,
+        {
+          airlineName: postData.airlineName,
+          arrivalCity: postData.arrivalCity,
+          arrivalDateTime: postData.arrivalDate + "T" + postData.arrivalTime,
+          businessCapacity: postData.businessCapacity,
+          businessPrice: postData.businessPrice,
+          departureCity: postData.departureCity,
+          departureDateTime: postData.departureDate + "T" + postData.departureTime,
+          economyCapacity: postData.economyCapacity,
+          economyPrice: postData.economyPrice,
+          flightNumber: postData.flightNumber,
+          isFull: postData.isFull ? true : false,
+          totalCapacity: postData.totalCapacity
+        }).then((res) => console.log(res))
     }
     setEdit('')
-
+    handleClose()
+    setReload(!reload)
   }
   return (
     <>
@@ -135,7 +142,7 @@ function Addflight({ show, setShow, data, setEdit,type,setnotifyData }) {
                   onChange={handleChange}
                   required
                   name='departureDate'
-                  defaultValue={data ? data.departureDateTime.split('T', 1) : ''}
+                  defaultValue={data ? moment(data.departureDateTime).format('YYYY-MM-DD') : ''}
                   autoFocus
                 />
               </Form.Group>
@@ -148,7 +155,7 @@ function Addflight({ show, setShow, data, setEdit,type,setnotifyData }) {
                   onChange={handleChange}
                   required
                   name="departureTime"
-                  defaultValue={data ? depDateTime.getHours() + ":" + depDateTime.getMinutes() : ''}
+                  defaultValue={data ? moment(data.departureDateTime).format('hh:mm') : ''}
 
                   autoFocus
                 />
@@ -220,7 +227,7 @@ function Addflight({ show, setShow, data, setEdit,type,setnotifyData }) {
                   required
                   size='lg'
                   name='arrivalDate'
-                  defaultValue={data ? data.arrivalDateTime.split('T', 1) : ''}
+                  defaultValue={data ?moment(data.arrivalDateTime).format('YYYY-MM-DD') : ''}
                   onChange={handleChange}
                   autoFocus
                 />
@@ -233,7 +240,7 @@ function Addflight({ show, setShow, data, setEdit,type,setnotifyData }) {
                   required
                   name='arrivalTime'
                   onChange={handleChange}
-                  defaultValue={data ? depDateTime.getHours() + ":" + depDateTime.getMinutes() : ''}
+                  defaultValue={data ? moment(data.arrivalDateTime).format('hh:mm') : ''}
                   autoFocus
                 />
               </Form.Group>

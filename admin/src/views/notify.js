@@ -1,8 +1,7 @@
 import React from 'react'
-import NotificationAlert from "react-notification-alert";
 
 function notify({option,setoption,notificationAlertRef}) {
-    
+    console.log(option)
     var options = {};
     options = {
       place: option.place,

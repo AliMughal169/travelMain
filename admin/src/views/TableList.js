@@ -25,15 +25,14 @@ function TableList() {
   const [data, setdata] = useState([]);
   const notificationAlertRef = React.useRef(null);
   const [notifyData, setnotifyData] = useState('');
-
+  const [reload,setReload]=useState(false)
   useEffect(() => {
     async function fetchdata() {
-      console.log(backendUrl)
       const response = await axios.get(`${backendUrl}v1/admin/flights/allflights`).then((res) => setdata(res.data.result));
     }
     fetchdata()
 
-  }, [])
+  }, [reload])
   async function deleteflight(id) {
     const response = await axios.delete(`${backendUrl}v1/admin/flights/deleteflight?_id=${id}`).then((res) => console.log(res))
 
@@ -67,7 +66,7 @@ function TableList() {
         notifyData ? <Notify option={notifyData} setoption={setnotifyData} notificationAlertRef={notificationAlertRef}></Notify> : ''
       }
       <NotificationAlert ref={notificationAlertRef} />
-      <Addflight show={show} setShow={setShow} data={editData} setEdit={setEditData} setnotifyData={setnotifyData} type={type} />
+      <Addflight show={show} setShow={setShow} data={editData} setEdit={setEditData} reload={reload} setReload={setReload} setnotifyData={setnotifyData} type={type} />
       <Container fluid>
         <Row>
           <Col md="12">
@@ -95,7 +94,10 @@ function TableList() {
                       <th className="border-0">Departure City</th>
                       <th className="border-0">Arrival City</th>
                       <th className="border-0">Departure Date</th>
-                      <th className="border-0">Arrival Date</th>
+                      <th className="border-0">Departure Time</th>
+                      <th className="border-0">Departure Date</th>
+                
+                      <th className="border-0">Arrival Time</th>
                       <th className="border-0">Buisness Price</th>
                       <th className="border-0">Economy Price</th>
                       <th className="border-0">Total Seats</th>
@@ -109,22 +111,23 @@ function TableList() {
                     {
                       data.map((dat, index) => {
                         return (
-                          <tr key={index}>
+                          <tr key={index} style={{backgroundColor: dat.isFull?"red":""}}>
                             <td>{dat.flightNumber}</td>
                             <td>{dat.airlineName}</td>
                             <td>{dat.departureCity}</td>
                             <td>{dat.arrivalCity}</td>
-                            {/* <td>{dat.departureDateTime}</td> */}
 
-                            <td>{moment(dat.departureDateTime).format("DD MM YYYY hh:mm")}</td>
-
-                            <td>{dat.arrivalDateTime}</td>
+                            <td>{moment(dat.departureDateTime).format("DD MM YYYY ")}</td>
+                            <td>{moment(dat.departureDateTime).format("hh:mma")}</td>
+                            <td>{moment(dat.arrivalDateTime).format("DD MM YYYY ")}</td>
+                            <td>{moment(dat.arrivalDateTime).format("hh:mma")}</td>
+                            
                             <td>{dat.businessPrice}</td>
                             <td>{dat.economyPrice}</td>
                             <td>{dat.totalCapacity}</td>
                             <td>{dat.businessCapacity}</td>
                             <td>{dat.economyCapacity}</td>
-                            <td>{dat.isFull}</td>
+                            <td>{dat.isFull?"Full":"Not Full"}</td>
 
                             <td><Button variant='success' onClick={() => editflight(dat)}> Edit</Button></td>
 

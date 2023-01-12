@@ -1,6 +1,6 @@
 
 import React from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
 
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
@@ -13,9 +13,8 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import AdminLayout from "layouts/Auth.js";
 import UnAuthLayout from "layouts/UnAuth.js";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
 
-root.render(
+ReactDOM.render(
   <BrowserRouter>
     <Switch>
       
@@ -24,4 +23,4 @@ root.render(
       <Redirect from="/" to="/admin/dashboard" />
     </Switch>
   </BrowserRouter>
-);
+,document.getElementById("root"));

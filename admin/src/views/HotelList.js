@@ -44,7 +44,7 @@ function HotelList() {
             }
         });
     }
-    function editflight(info) {
+    function editHotel(info) {
         //console.log(info)
         setEditData(info)
         setType('Save changes')
@@ -105,7 +105,7 @@ function HotelList() {
                                                         <td>{data.totalRooms}</td>
                                                         <td>
                                                             {data.isFull ? (
-                                                                <p>Fully booked :{data.isFull}</p>
+                                                                <p>Fully booked </p>
                                                             ) : (
                                                                 <p>Available</p>
                                                             )}
@@ -115,7 +115,7 @@ function HotelList() {
                                                             <Button style={{ borderColor: "green" }}
                                                                 onClick={() => {
                                                                     //setType('Save changes')
-                                                                    editflight(data)
+                                                                    editHotel(data)
                                                                 }
                                                                 }>
 

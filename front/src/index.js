@@ -13,7 +13,7 @@ root.render(
     <Routes>
     <Route path="/user"  element={ <Auth />} />
       {/* <Route path="/unauth" render={(props) => <UnAuthLayout {...props} />} /> */}
-      <Route path='/'  to="/user/home" />
+      <Route path='/'  element={ <Auth />} />
     </Routes>
     </BrowserRouter>
     

@@ -12,7 +12,7 @@ const allRoutes=[
         name: "Login",
         icon: "nc-icon nc-chart-pie-35",
         component: Login,
-        showInSideBar: false,
+        showInBar: false,
         layout: "/unauth"
     },
     {

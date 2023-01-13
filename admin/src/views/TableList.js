@@ -18,6 +18,7 @@ import NotificationAlert from "react-notification-alert";
 import Notify from "./notify";
 
 function TableList() {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('access_token')}`;
   const [type, setType] = useState('')
   const [show, setShow] = useState(false)
   const handleShow = () => setShow(true);

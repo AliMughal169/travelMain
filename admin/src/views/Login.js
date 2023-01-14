@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { createContext, useContext } from "react";
 const backendUrl=process.env.REACT_APP_BASE_URL;
 // react-bootstrap components
 import {
@@ -19,13 +19,15 @@ function Login() {
     {
         event.preventDefault();
         const data =new FormData(event.target);
+        console.log(data.get("password"))
         try {
             const response =await axios.get(`${backendUrl}v1/admin/admin/login?email=${data.get("email")}&password=${data.get("password")}`)
-            if(response.data.result.jwtToken)
+            if(response.data.token)
             {
-                localStorage.setItem('access_token',response.data.result.jwtToken)
-                localStorage.setItem('_id',response.data.result._id)
-                console.log(response.data.result.jwtToken)
+                
+                sessionStorage.setItem('access_token',response.data.token)
+                sessionStorage.setItem('_id',response.data.result._id)
+                
                 history.push('/admin/dashboard')
             }
             else{

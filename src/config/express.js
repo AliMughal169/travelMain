@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const frontAuth = require('../api/middlewares/front/auth');
+const Auth = require('../api/middlewares/Admin/auth');
 const frontRoutes = require('../api/routes/v1/front/index');
 const adminRoutes = require('../api/routes/v1/admin/index');
 const path = require('path');
@@ -25,7 +25,7 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 // authentication middleware to get token
-//app.use(frontAuth.authenticate);
+app.use(Auth.authenticate);
 
 // mount admin api v1 routes
 app.use('/v1/admin', adminRoutes);

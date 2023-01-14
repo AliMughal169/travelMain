@@ -6,9 +6,21 @@ const backendUrl = process.env.REACT_APP_BASE_URL;
 function Queries() {
     const [mainData,setMainData]=useState([]);
     const [reload,setReload]=useState(false)
-    useEffect(()=>{
+    var config=null;
+  useEffect(() => {
+    config= {
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem("access_token")}`
+        }
+      }
         async function fetchQueries() {
-            const response=await axios.get(`${backendUrl}v1/admin/queries/allqueries`).then((res)=>setMainData(res.data.result))
+            const response=await axios.get(`${backendUrl}v1/admin/queries/allqueries`,config).then((res) => {
+                if (res.data.message=="UnAuthorized")
+                {
+                    history.push('/unauth/login')
+                }
+                setMainData(res.data.result)
+              })
         }
         fetchQueries()
         

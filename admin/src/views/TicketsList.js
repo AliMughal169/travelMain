@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import TicketDetail from "./TicketDetail";
 import Notify from './notify'
 import NotificationAlert from "react-notification-alert";
+import { useHistory } from "react-router";
 
 function TableList() {
   const [show, setShow] = useState(false)
@@ -26,22 +27,26 @@ function TableList() {
   const [passData, setPassData] = useState([]);
   const [flightData, setFlightData] = useState([])
   const notificationAlertRef = React.useRef(null);
-
-
-
+  const history=useHistory()
+  var config=null;
   useEffect(() => {
+    config= {
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem("access_token")}`
+        }
+      }
     async function fetchTicktData() {
-      const response = await axios.get(`${backendUrl}v1/admin/tickets/alltickets`).then((res) => setTicketData(res.data.result));
+      const response = await axios.get(`${backendUrl}v1/admin/tickets/alltickets`,config).then((res) => setTicketData(res.data.result));
 
 
 
     }
     async function fetchPassData() {
-      const response = await axios.get(`${backendUrl}v1/admin/passenger/findpassenger`).then((res) => setPassData(res.data.result));
+      const response = await axios.get(`${backendUrl}v1/admin/passenger/findpassenger`,config).then((res) => setPassData(res.data.result));
 
     }
     async function fetchFlightData() {
-      const response = await axios.get(`${backendUrl}v1/admin/flights/allflights`).then((res) => setFlightData(res.data.result));
+      const response = await axios.get(`${backendUrl}v1/admin/flights/allflights`,config).then((res) => console.log(res.data.result));
 
     }
     fetchTicktData()
@@ -50,7 +55,7 @@ function TableList() {
 
   }, [reload])
   async function deleteTicket(id) {
-    const response = await axios.delete(`${backendUrl}v1/admin/tickets/deleteticket?_id=${id}`).then((res) => console.log(res))
+    const response = await axios.delete(`${backendUrl}v1/admin/tickets/deleteticket?_id=${id}`,config).then((res) => console.log(res))
     setReload(!reload)
     setnotifyData({ place: "tc", message: `deleted id : ${id} successfully`, type: "success" })
 

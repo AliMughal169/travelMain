@@ -40,7 +40,7 @@ function AddHotel({ show, setShow, data, setEdit, type }) {
     })
     const handleChange = (event) => {
         postData[event.target.name] = event.target.value
-
+        console.log(postData)
     }
 
 
@@ -60,7 +60,7 @@ function AddHotel({ show, setShow, data, setEdit, type }) {
                 address: postData.address,
                 totalRooms: postData.totalRooms,
                 stars: postData.stars,
-                isFull: postData.isFull ? true : false
+                isFull: postData.isFull=="Full" ? true : false
 
             }).then((res) => console.log(res))
             console.log(postData._id, postData.hotelName, postData.address, postData.totalRooms, postData.stars, postData.isFull)
@@ -73,7 +73,7 @@ function AddHotel({ show, setShow, data, setEdit, type }) {
                     address: postData.address,
                     totalRooms: postData.totalRooms,
                     stars: postData.stars,
-                    isFull: postData.isFull ? 1 : 0
+                    isFull: postData.isFull=="Full" ? true : false
 
                 }).then((res) => console.log(res))
             setRefresh(!refresh)
@@ -83,12 +83,12 @@ function AddHotel({ show, setShow, data, setEdit, type }) {
     }
     return (
         <>
-            {
+            {/* {
                 notifyData ? <Notify option={notifyData} setoption={setnotifyData} notificationAlertRef={notificationAlertRef}></Notify> : ''
             }
             <NotificationAlert ref={notificationAlertRef} />
             <BookedDetails show={show} setShow={setShow} guestData={hotelDetail} />
-            <AddHotel show={show} setShow={setShow} data={editData} setEdit={setEditData} type={type} />
+            <AddHotel show={show} setShow={setShow} data={editData} setEdit={setEditData} type={type} /> */}
 
             <Modal show={show} size="lg" onHide={handleClose} >
                 <Modal.Header closeButton>
@@ -138,9 +138,10 @@ function AddHotel({ show, setShow, data, setEdit, type }) {
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                                 <Form.Label>Stars</Form.Label>
                                 <Form.Control
-                                    type="number" setRefresh
+                                    type="number" 
+                                    name='stars'
                                     defaultValue={data ? data.stars : ''}
-
+                                    onChange={handleChange}
                                     autoFocus
                                 />
                             </Form.Group>

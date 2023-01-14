@@ -5,8 +5,11 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import moment from 'moment'
+import { useHistory } from 'react-router';
+
 const backendUrl = process.env.REACT_APP_BASE_URL;
 function Addflight({ show, setShow, data, setEdit,type,setnotifyData,reload,setReload }) {
+  const history=useHistory()
   const editId=data._id
   var postData = {
     airlineName: "",
@@ -29,8 +32,13 @@ function Addflight({ show, setShow, data, setEdit,type,setnotifyData,reload,setR
     postData[event.target.name] = event.target.value
   }
   const handleClose = () => setShow(false);
-
+  var config=null;
   useEffect(() => {
+    config= {
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem("access_token")}`
+        }
+      }
     if (data) {
       postData.airlineName=data.airlineName
       postData.flightNumber=data.flightNumber
@@ -59,7 +67,7 @@ function Addflight({ show, setShow, data, setEdit,type,setnotifyData,reload,setR
     console.log(moment(postData.departureDate+'T'+postData.departureTime).format())
     if (type == "Save Changes") {
       
-      const res= await axios.put(`${backendUrl}v1/admin/flights/updateflight?_id=${editId}`,{
+      const res= await axios.put(`${backendUrl}v1/admin/flights/updateflight?_id=${editId}`,config,{
         airlineName: postData.airlineName,
         arrivalCity: postData.arrivalCity,
         arrivalDateTime: moment(postData.arrivalDate+'T'+postData.arrivalTime).format(),
@@ -72,10 +80,15 @@ function Addflight({ show, setShow, data, setEdit,type,setnotifyData,reload,setR
         flightNumber: postData.flightNumber,
         isFull: postData.isFull ? true : false,
         totalCapacity: postData.totalCapacity
-      }).then((res) => console.log(res))
+      }).then((res) => {
+        if (res.data.message=="UnAuthorized")
+        {
+            history.push('/unauth/login')
+        }
+      })
     }
     else {
-      const response = await axios.post(`${backendUrl}v1/admin/flights/addflight`,
+      const response = await axios.post(`${backendUrl}v1/admin/flights/addflight`,config,
         {
           airlineName: postData.airlineName,
           arrivalCity: postData.arrivalCity,
@@ -89,7 +102,15 @@ function Addflight({ show, setShow, data, setEdit,type,setnotifyData,reload,setR
           flightNumber: postData.flightNumber,
           isFull: postData.isFull ? true : false,
           totalCapacity: postData.totalCapacity
-        }).then((res) => console.log(res))
+        }).then(
+          (res) => {
+            if (res.data.message=="UnAuthorized")
+            {
+                history.push('/unauth/login')
+            }
+           
+          }
+        )
     }
     setEdit('')
     handleClose()

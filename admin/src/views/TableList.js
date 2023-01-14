@@ -16,6 +16,7 @@ import Addflight from "./Addflight";
 import moment from "moment";
 import NotificationAlert from "react-notification-alert";
 import Notify from "./notify";
+import { useHistory } from "react-router";
 
 function TableList() {
   axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('access_token')}`;
@@ -27,15 +28,36 @@ function TableList() {
   const notificationAlertRef = React.useRef(null);
   const [notifyData, setnotifyData] = useState('');
   const [reload,setReload]=useState(false)
+  const history=useHistory();
+  var config=null;
   useEffect(() => {
+    config= {
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem("access_token")}`
+        }
+      }
+    console.log(localStorage.getItem("access_token"))
     async function fetchdata() {
-      const response = await axios.get(`${backendUrl}v1/admin/flights/allflights`).then((res) => setdata(res.data.result));
+      const response = await axios.get(`${backendUrl}v1/admin/flights/allflights`, config).then((res) => {
+        if (res.data.message=="UnAuthorized")
+        {
+            history.push('/unauth/login')
+        }
+        setdata(res.data.result)
+
+      });
     }
     fetchdata()
 
   }, [reload])
   async function deleteflight(id) {
-    const response = await axios.delete(`${backendUrl}v1/admin/flights/deleteflight?_id=${id}`).then((res) => console.log(res))
+    const response = await axios.delete(`${backendUrl}v1/admin/flights/deleteflight?_id=${id}`,config).then((res) => {
+      if (res.data.message=="UnAuthorized")
+      {
+          history.push('/unauth/login')
+      }
+     
+    })
 
   }
   function alerted(id) {

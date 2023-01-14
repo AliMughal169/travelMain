@@ -8,7 +8,6 @@ const bookedHotelSchema = new mongoose.Schema({
     checkOut: { type: Date, required: true },
     guestName: { type: String, required: true },
     bookingDate: { type: Date, required: true }
-
 })
 
 module.exports = mongoose.model('bookedHotel', bookedHotelSchema)

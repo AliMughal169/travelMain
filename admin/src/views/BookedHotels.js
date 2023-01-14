@@ -23,20 +23,19 @@ function BookedHotels() {
   const [hotelDetail, setHotelDetail] = useState(false)
   const [reload, setReload] = useState(false)
   const [hotelData, setHotelData] = useState([]);
-
   const [guestData, setguestData] = useState([])
-  const [userId, setuserId] = useState('')
   const notificationAlertRef = React.useRef(null);
+  const [roomData, setroomData] = useState([]);
+  const [showOtherComponent, setShowOtherComponent] = useState(false);
 
-
+  function handleButtonClick() {
+    setShowOtherComponent(true);
+  }
 
   useEffect(() => {
-    // async function fetchHotelData() {
-    //   const response = await axios.get(`${backendUrl}v1/admin/hotelBookings/allBookedHotel`).then((res) => setHotelData(res.data.result));
-
-
-
-    // }
+    async function fetchHotelData() {
+      const response = await axios.get(`${backendUrl}v1/admin/bookedHotels/allBookedHotel`).then((res) => setHotelData(res.data.result));
+    }
     async function fetchGuestData() {
       const response = await axios.get(`${backendUrl}v1/admin/guests/guests`).then((res) => setguestData(res.data.result));
       //console.log(guestData)
@@ -44,10 +43,17 @@ function BookedHotels() {
 
 
     }
+    async function fetchRoomData() {
+      const response = await axios.get(`${backendUrl}v1/admin/rooms/allrooms`).then((res) => setroomData(res.data.result));
+      // console.log(roomData)
+    }
 
-    //  fetchHotelData()
-    fetchGuestData()
-    // fetchRoomData()
+
+    fetchHotelData()
+    fetchGuestData();
+    fetchRoomData();
+    // console.log(roomData)
+
 
 
   }, [reload])
@@ -128,7 +134,7 @@ function BookedHotels() {
       }
       <NotificationAlert ref={notificationAlertRef} />
 
-      <BookedDetails show={show} setShow={setShow} hotelDetail={hotelDetail._id} />
+      {/* <BookedDetails show={show} setShow={setShow} hotelDetail={hotelDetail} roomData={roomData} hotelData={hotelData} /> */}
 
       <Container fluid>
         <Row>
@@ -167,7 +173,10 @@ function BookedHotels() {
                             <td>{data.phone}</td>
                             <td>{data.age}</td>
                             <td>{data.passport}</td>
-                            <td><Button variant='success' onClick={() => { detailClick(data) }}> Detail</Button></td>
+                            <td>
+                              <Button variant='success' onClick={() => { detailClick(data), handleButtonClick() }}> Detail</Button>
+                              {showOtherComponent && <BookedDetails show={show} setShow={setShow} hotelDetail={hotelDetail} roomData={roomData} hotelData={hotelData} />}
+                            </td>
                             <td><Button variant='danger' onClick={() => alerted(data._id)} > Delete</Button></td>
 
                           </tr>

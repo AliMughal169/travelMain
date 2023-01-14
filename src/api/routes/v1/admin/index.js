@@ -8,12 +8,8 @@ const hotelListRoutes = require('./hotelList.route')
 const bookedHotelRoutes = require('./bookedHotel.route')
 const rooms = require("./rooms.route")
 const guests = require("./guests.route")
-<<<<<<< HEAD
-const query=require("./query.route")
-const admin=require('./admin.route')
-=======
 const query = require("./query.route")
->>>>>>> 1725bc95f452d918f86b9c93d3ec1b8853493ade
+const admin = require('./admin.route')
 const router = express.Router()
 
 
@@ -30,8 +26,8 @@ router.use('/hotelList', hotelListRoutes)
 router.use('/bookedHotels', bookedHotelRoutes)
 router.use('/rooms', rooms)
 router.use('/guests', guests)
-router.use('/queries',query)
-router.use('/admin',admin)
+router.use('/queries', query)
+router.use('/admin', admin)
 
 module.exports = router
 

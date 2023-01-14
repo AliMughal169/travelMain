@@ -31,20 +31,43 @@ function BookedHotels() {
   function handleButtonClick() {
     setShowOtherComponent(true);
   }
-
+  var config=null;
   useEffect(() => {
+    config= {
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem("access_token")}`
+        }
+      }
     async function fetchHotelData() {
-      const response = await axios.get(`${backendUrl}v1/admin/bookedHotels/allBookedHotel`).then((res) => setHotelData(res.data.result));
+      const response = await axios.get(`${backendUrl}v1/admin/bookedHotels/allBookedHotel`,config).then((res) => {
+        if (res.data.message=="UnAuthorized")
+        {
+            history.push('/unauth/login')
+        }
+        setHotelData(res.data.result)
+      });
     }
     async function fetchGuestData() {
-      const response = await axios.get(`${backendUrl}v1/admin/guests/guests`).then((res) => setguestData(res.data.result));
+      const response = await axios.get(`${backendUrl}v1/admin/guests/guests`,config).then((res) => {
+        if (res.data.message=="UnAuthorized")
+        {
+            history.push('/unauth/login')
+        }
+        setguestData(res.data.result)
+      });
       //console.log(guestData)
 
 
 
     }
     async function fetchRoomData() {
-      const response = await axios.get(`${backendUrl}v1/admin/rooms/allrooms`).then((res) => setroomData(res.data.result));
+      const response = await axios.get(`${backendUrl}v1/admin/rooms/allrooms`,config).then((res) => {
+        if (res.data.message=="UnAuthorized")
+        {
+            history.push('/unauth/login')
+        }
+        setroomData(res.data.result)
+      });
       // console.log(roomData)
     }
 
@@ -59,7 +82,12 @@ function BookedHotels() {
   }, [reload])
 
   async function deleteGuest(id) {
-    const response = await axios.delete(`${backendUrl}v1/admin/guests/deleteGuest?_id=${id}`).then((res) => console.log(res))
+    const response = await axios.delete(`${backendUrl}v1/admin/guests/deleteGuest?_id=${id}`,config).then((res) => {
+      if (res.data.message=="UnAuthorized")
+      {
+          history.push('/unauth/login')
+      }
+    })
     setReload(!reload)
     setnotifyData({ place: "tc", message: `deleted id : ${id} successfully`, type: "success" })
 

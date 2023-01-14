@@ -21,8 +21,13 @@ function AddHotel({ show, setShow, data, setEdit, type }) {
         stars: 0,
         isFull: false,
     }
-
+    var config=null;
     useEffect(() => {
+      config= {
+          headers: {
+            'Authorization': `Bearer ${sessionStorage.getItem("access_token")}`
+          }
+        }
 
         if (data) {
             //_id= data._id,
@@ -53,7 +58,7 @@ function AddHotel({ show, setShow, data, setEdit, type }) {
         console.log(`id im add hote ${data._id}`)
         if (type == "Save changes") {
 
-            const res = await axios.put(`${backendUrl}v1/admin/hotellist/updateHotel?_id=${editId}`, {
+            const res = await axios.put(`${backendUrl}v1/admin/hotellist/updateHotel?_id=${editId}`,config, {
 
                 hotelName: postData.hotelName,
                 address: postData.address,
@@ -61,7 +66,12 @@ function AddHotel({ show, setShow, data, setEdit, type }) {
                 stars: postData.stars,
                 isFull: postData.isFull=="Full" ? true : false
 
-            }).then((res) => console.log(res))
+            }).then((res) => {
+                if (res.data.message=="UnAuthorized")
+                {
+                    history.push('/unauth/login')
+                }
+              })
             console.log(postData._id, postData.hotelName, postData.address, postData.totalRooms, postData.stars, postData.isFull)
 
         }
@@ -74,7 +84,12 @@ function AddHotel({ show, setShow, data, setEdit, type }) {
                     stars: postData.stars,
                     isFull: postData.isFull=="Full" ? true : false
 
-                }).then((res) => console.log(res))
+                }).then((res) => {
+                    if (res.data.message=="UnAuthorized")
+                    {
+                        history.push('/unauth/login')
+                    }
+                  })
             setRefresh(!refresh)
         }
         setEdit('');

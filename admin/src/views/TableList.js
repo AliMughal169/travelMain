@@ -33,7 +33,7 @@ function TableList() {
   useEffect(() => {
     config= {
         headers: {
-          'Authorization': `Bearer ${sessionStorage.getItem("access_token")}`
+          'Authorization': `Bearer ${localStorage.getItem("access_token")}`
         }
       }
     console.log(localStorage.getItem("access_token"))
@@ -56,7 +56,7 @@ function TableList() {
       {
           history.push('/unauth/login')
       }
-     
+     setReload(!reload)
     })
 
   }
@@ -70,7 +70,6 @@ function TableList() {
 
       if (result.isConfirmed) {
         deleteflight(id)
-        refreshPage()
       } else if (result.isDenied) {
         Swal.fire('Changes are not saved', '', 'info')
       }

@@ -32,7 +32,7 @@ function TableList() {
   useEffect(() => {
     config= {
         headers: {
-          'Authorization': `Bearer ${sessionStorage.getItem("access_token")}`
+          'Authorization': `Bearer ${localStorage.getItem("access_token")}`
         }
       }
     async function fetchTicktData() {

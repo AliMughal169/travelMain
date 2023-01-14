@@ -15,7 +15,7 @@ exports.login=async(req,res,next)=>{
                 time: Date(),
                 adminId: result._id,
             }
-            const token = jwt.sign(data, jwtSecretKey,{expiresIn:"50m"});
+            const token = jwt.sign(data, jwtSecretKey,{expiresIn:"1h"});
             console.log("generated Token",token)
             var setToken=await admin.updateOne({_id:result._id},{jwtToken:token})
             res.status(200).send({status:true,message:"Admin Found",token,result})

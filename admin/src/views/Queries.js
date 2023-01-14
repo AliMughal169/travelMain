@@ -1,16 +1,18 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap';
+import { useHistory } from 'react-router';
 import Swal from 'sweetalert2';
 const backendUrl = process.env.REACT_APP_BASE_URL;
 function Queries() {
+  const history=useHistory()
     const [mainData,setMainData]=useState([]);
     const [reload,setReload]=useState(false)
     var config=null;
   useEffect(() => {
     config= {
         headers: {
-          'Authorization': `Bearer ${sessionStorage.getItem("access_token")}`
+          'Authorization': `Bearer ${localStorage.getItem("access_token")}`
         }
       }
         async function fetchQueries() {

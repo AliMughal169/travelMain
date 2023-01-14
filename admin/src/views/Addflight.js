@@ -35,8 +35,9 @@ function Addflight({ show, setShow, data, setEdit,type,setnotifyData,reload,setR
   var config=null;
   useEffect(() => {
     config= {
+      
         headers: {
-          'Authorization': `Bearer ${sessionStorage.getItem("access_token")}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       }
     if (data) {
@@ -66,8 +67,9 @@ function Addflight({ show, setShow, data, setEdit,type,setnotifyData,reload,setR
     }
     console.log(moment(postData.departureDate+'T'+postData.departureTime).format())
     if (type == "Save Changes") {
-      
-      const res= await axios.put(`${backendUrl}v1/admin/flights/updateflight?_id=${editId}`,config,{
+      console.log(localStorage.getItem('access_token'))
+
+      const res= await axios.put(`${backendUrl}v1/admin/flights/updateflight?_id=${editId}`,{
         airlineName: postData.airlineName,
         arrivalCity: postData.arrivalCity,
         arrivalDateTime: moment(postData.arrivalDate+'T'+postData.arrivalTime).format(),
@@ -80,7 +82,8 @@ function Addflight({ show, setShow, data, setEdit,type,setnotifyData,reload,setR
         flightNumber: postData.flightNumber,
         isFull: postData.isFull ? true : false,
         totalCapacity: postData.totalCapacity
-      }).then((res) => {
+      },config).then((res) => {
+        console.log(localStorage.getItem('access_token'))
         if (res.data.message=="UnAuthorized")
         {
             history.push('/unauth/login')
@@ -88,7 +91,7 @@ function Addflight({ show, setShow, data, setEdit,type,setnotifyData,reload,setR
       })
     }
     else {
-      const response = await axios.post(`${backendUrl}v1/admin/flights/addflight`,config,
+      const response = await axios.post(`${backendUrl}v1/admin/flights/addflight`,
         {
           airlineName: postData.airlineName,
           arrivalCity: postData.arrivalCity,
@@ -102,7 +105,7 @@ function Addflight({ show, setShow, data, setEdit,type,setnotifyData,reload,setR
           flightNumber: postData.flightNumber,
           isFull: postData.isFull ? true : false,
           totalCapacity: postData.totalCapacity
-        }).then(
+        },config).then(
           (res) => {
             if (res.data.message=="UnAuthorized")
             {

@@ -25,8 +25,8 @@ function Login() {
             if(response.data.token)
             {
                 
-                sessionStorage.setItem('access_token',response.data.token)
-                sessionStorage.setItem('_id',response.data.result._id)
+                localStorage.setItem('access_token',response.data.token)
+                localStorage.setItem('_id',response.data.result._id)
                 
                 history.push('/admin/dashboard')
             }

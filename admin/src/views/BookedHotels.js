@@ -15,8 +15,10 @@ import Swal from "sweetalert2";
 import BookedDetails from "./BookedHotelDetails";
 import Notify from './notify'
 import NotificationAlert from "react-notification-alert";
+import { useHistory } from "react-router";
 
 function BookedHotels() {
+  const history=useHistory()
   const [show, setShow] = useState(false)
   const handleShow = () => setShow(true);
   const [notifyData, setnotifyData] = useState('');
@@ -35,7 +37,7 @@ function BookedHotels() {
   useEffect(() => {
     config= {
         headers: {
-          'Authorization': `Bearer ${sessionStorage.getItem("access_token")}`
+          'Authorization': `Bearer ${localStorage.getItem("access_token")}`
         }
       }
     async function fetchHotelData() {

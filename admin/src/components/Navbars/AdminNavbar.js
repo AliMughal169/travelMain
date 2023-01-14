@@ -16,12 +16,13 @@
 
 */
 import React, { Component } from "react";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 
 import routes from "routes.js";
 
 function Header() {
+  const history=useHistory()
   const location = useLocation();
   const mobileSidebarToggle = (e) => {
     e.preventDefault();
@@ -196,7 +197,11 @@ function Header() {
               <Nav.Link
                 className="m-0"
                 href="#pablo"
-                onClick={(e) => e.preventDefault()}
+                onClick={(e) => {
+                  e.preventDefault()
+                  localStorage.clear()
+                  history.push('/auth/login')
+                }}
               >
                 <span className="no-icon">Log out</span>
               </Nav.Link>

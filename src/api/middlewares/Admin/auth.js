@@ -21,7 +21,6 @@ exports.authenticate=async (req,res,next)=>{
     const decodedToken = jwt.verify(token,process.env.JWT_SECRET_KEY );
     console.log(decodedToken.adminId)
     const response=await admin.findOne({_id:decodedToken.adminId})
-    console.log(response)
     if (response.jwtToken==token)
     {
         console.log("token Matched")

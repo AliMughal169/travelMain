@@ -9,33 +9,32 @@ const backendUrl = process.env.REACT_APP_BASE_URL;
 
 
 function AddHotel({ show, setShow, data, setEdit, type }) {
-    const editId= data._id
+    const editId = data._id
 
     const [refresh, setRefresh] = useState(false);
     var postData =
-        {
-            
-            hotelName: "",
-            address: '',
-            totalRooms:0,
-            stars: 0,
-            isFull: false,
-        }
-    
+    {
+
+        hotelName: "",
+        address: '',
+        totalRooms: 0,
+        stars: 0,
+        isFull: false,
+    }
+
     useEffect(() => {
 
-        if(data)
-        {
+        if (data) {
             //_id= data._id,
-            postData.hotelName= data.hotelName,
-            postData.address= data.address,
-            postData.totalRooms= data.totalRooms,
-            postData.stars= data.stars,
-            postData.isFull= data.isFull
+            postData.hotelName = data.hotelName,
+                postData.address = data.address,
+                postData.totalRooms = data.totalRooms,
+                postData.stars = data.stars,
+                postData.isFull = data.isFull
         }
-        
+
         //setPostData(data)
-        
+
         //setPost(data)
     })
     const handleChange = (event) => {
@@ -55,7 +54,7 @@ function AddHotel({ show, setShow, data, setEdit, type }) {
         if (type == "Save changes") {
 
             const res = await axios.put(`${backendUrl}v1/admin/hotellist/updateHotel?_id=${editId}`, {
-                
+
                 hotelName: postData.hotelName,
                 address: postData.address,
                 totalRooms: postData.totalRooms,
@@ -64,7 +63,7 @@ function AddHotel({ show, setShow, data, setEdit, type }) {
 
             }).then((res) => console.log(res))
             console.log(postData._id, postData.hotelName, postData.address, postData.totalRooms, postData.stars, postData.isFull)
-            
+
         }
         else {
             const response = await axios.post(`${backendUrl}v1/admin/hotellist/addHotel`,

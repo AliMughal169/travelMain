@@ -26,8 +26,8 @@ router.use('/hotelList', hotelListRoutes)
 router.use('/bookedHotels', bookedHotelRoutes)
 router.use('/rooms', rooms)
 router.use('/guests', guests)
-router.use('/queries',query)
-router.use('/admin',admin)
+router.use('/queries', query)
+router.use('/admin', admin)
 
 module.exports = router
 

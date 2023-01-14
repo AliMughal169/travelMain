@@ -4,23 +4,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 const backendUrl = process.env.REACT_APP_BASE_URL;
 
-function BookedHotelDetails({ show, setShow, hotelDetail }) {
-    console.log(hotelDetail)
+function checkBooked() {
 
-    const [roomData, setroomData] = useState([]);
+}
 
-    useEffect(() => {
-        async function fetchRoomData() {
-            const response = await axios.get(`${backendUrl}v1/admin/rooms/allrooms`).then((res) => setroomData(res.data.result));
-            console.log(roomData._id)
-        }
-
-        fetchRoomData()
-
-
-    }, [])
-
-
+function BookedHotelDetails({ show, setShow, hotelDetail, roomData, hotelData }) {
+    // console.log(hotelDetail._id)
+    // console.log(roomData)
+    // console.log(hotelData.userId)
 
     return (
         <>
@@ -41,71 +32,74 @@ function BookedHotelDetails({ show, setShow, hotelDetail }) {
                 <Modal.Body className="text-center">
                     <div className='container-fluid'>
                         <h4>Hotel Details</h4>
-                        {/* <div className=' row text-left '>
-                            <div className='col-sm'>
-                                <div className='label' >
-                                    <p className=' font-weight-bold'>Passenger Name :  {roomDetail(guestDetail.passengerId, "firstName")}</p>
-                                </div>
-                                <div className='label' >
-                                    <p className=' font-weight-bold'>Passport Number :  {roomDetail(guestDetail.passengerId, "passportNumber")}</p>
-                                </div>
-                                <div className='label' >
-                                    <p className=' font-weight-bold'>Nationality :  {roomDetail(guestDetail.passengerId, "nationality")}</p>
-                                </div>
-                                <div className='label' >
-                                    <p className=' font-weight-bold'>Age :  {roomDetail(guestDetail.passengerId, "age")}</p>
-                                </div>
-
-                            </div>
-                            <div className=' col-sm'>
-                                <div className='label' >
-                                    <p className=' font-weight-bold'>Father Name :  {roomDetail(guestDetail.passengerId, "lastName")}</p>
-                                </div>
-                                <div className='label' >
-                                    <p className=' font-weight-bold'>Passport Expiry :  {roomDetail(guestDetail.passengerId, "passportExpiry")}</p>
-                                </div>
-                                <div className='label' >
-                                    <p className=' font-weight-bold'>Gender :  {roomDetail(guestDetail.passengerId, "gender")}</p>
-                                </div>
-
-                            </div>
-                        </div> */}
+                        {
+                            hotelData.map((data, index) => {
+                                return (
+                                    <div className=' row text-left '>
+                                        <div className='col-sm'>
+                                            <div className='label' >
+                                                <p className=' font-weight-bold'>Hotel Name : {hotelDetail.firstName} </p>
+                                            </div>
+                                            <div className='label' >
+                                                <p className=' font-weight-bold'>Guest Name :{data.guestName} </p>
+                                            </div>
+                                            <div className='label' >
+                                                <p className=' font-weight-bold'>Check In : {data.checkIn} </p>
+                                            </div>
+                                            <div className='label' >
+                                                <p className=' font-weight-bold'>Check Out : {data.checkOut} </p>
+                                            </div>
+                                            <div className='label' >
+                                                <p className=' font-weight-bold'>Booking Date : {data.bookingDate} </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        }
 
 
                     </div>
                     <div className='container-fluid'>
                         <h4>Room Detail</h4>
-                        {roomData._id === hotelDetail ? (
+                        {/* {roomData === hotelDetail ? ( */}
+                        {
+
                             <div className=' row text-left '>
                                 <div className='col-sm'>
                                     <div className='label' >
-                                        <p className=' font-weight-bold'>Category:  { }</p>
-                                    </div>
-                                    {/* <div className='label' >
-                                        <p className=' font-weight-bold'>Room Number :  { }</p>
+                                        <p className=' font-weight-bold'>Category:  {roomData[0].category}</p>
                                     </div>
                                     <div className='label' >
-                                        <p className=' font-weight-bold'>Price :  { }</p>
+                                        <p className=' font-weight-bold'>Room Number :  {roomData[0].roomNumber}</p>
                                     </div>
                                     <div className='label' >
-                                        <p className=' font-weight-bold'>Description :  { }</p>
+                                        <p className=' font-weight-bold'>Price :  {roomData[0].price}</p>
                                     </div>
                                     <div className='label' >
-                                        <p className=' font-weight-bold'>Is Booked:  { }</p>
-                                    </div> */}
-
-
+                                        <p className=' font-weight-bold'>Description :  {roomData[0].desc}</p>
+                                    </div>
+                                    <div className='label' >
+                                        <p className=' font-weight-bold'>Is Booked:  {roomData[0].isFull}</p>
+                                    </div>
                                 </div>
                             </div>
-                        ) : (
-                            <div className=' row text-left '>
+
+                        }
+
+
+
+                        {/* ) : ( */}
+                        {/* <div className=' row text-left '>
                                 <div className='col-sm'>
+
                                     <div className='label' >
-                                        <p className=' font-weight-bold'>Category:  {hotelDetail}</p>
+                                        <p className=' font-weight-bold'>No rooms detail</p>
+
                                     </div>
                                 </div>
-                            </div>
-                        )}
+                            </div> */}
+                        {/* )} */}
 
                         {/* <div className=' col-sm'>
                                 <div className='label' >

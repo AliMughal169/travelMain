@@ -4,13 +4,18 @@ import routes from "../routes"
 import Header from '../components/Header/Header';
 import Footer from "../components/Footer/Footer"
 import UserNavbar from '../components/Navbar/UserNavbar';
+import Home from '../views/Home';
+import Flight from '../views/Flight';
+import Hotel from '../views/Hotel';
+import ContactUs from '../views/ContactUs';
 function Auth() {
     const location=useLocation();
     const mainPanel=React.useRef(null);
     
     const getRoutes=(routes)=>{
         return routes.map((prop,key)=>{
-            if (prop.layout==="/user")
+            console.log(prop.layout)
+            if (prop.layout=="/user")
             {
                 return(
                     <Route key={key} path={prop.layout+prop.path} element={<prop.component/>} />
@@ -38,10 +43,17 @@ function Auth() {
   return (
     <>
         <div className='wrapper'>
-            <Header/>
-            <UserNavbar routes={routes} />
-            <div className='content'>
-                <Routes>{getRoutes(routes)}</Routes>
+            <Header routes={routes}/>
+            
+            <div className='content' >
+                
+                <Routes>
+                <Route path="/user/home"  element={ <Home />} />
+                <Route path="/flights"  element={ <Flight />} />
+                <Route path="/hotels"  element={ <Hotel />} />
+                <Route path="/contactus"  element={ <ContactUs />} />
+                     
+                </Routes>
             </div>
             <Footer/>
         </div>

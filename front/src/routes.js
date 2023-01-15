@@ -11,7 +11,7 @@ const allRoutes=[
         path: "/login",
         name: "Login",
         icon: "nc-icon nc-chart-pie-35",
-        component: Login,
+        component: <Login/>,
         showInBar: false,
         layout: "/unauth"
     },
@@ -21,7 +21,7 @@ const allRoutes=[
         icon:"",
         component:Home,
         showInBar:true,
-        layout:"/user"
+        layout:"user"
     },
     {
         path:"/flights",

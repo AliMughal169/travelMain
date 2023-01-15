@@ -8,6 +8,15 @@ exports.allflights= async (req,res,next)=>{
 
 exports.searchflight= async (req,res,next)=>{
   const query = req.query
-  const result = await Flight.find(query);
-  res.status(200).send({status: true, message: "Searched Flights Fetched Successfully", result})
+  console.log(query)
+  const result = await Flight.find({departureCity: query.departureCity,arrivalCity: query.arrivalCity,isFull:false});
+  if (result)
+  {
+    res.status(200).send({status: true, message: "Searched Flights Fetched Successfully", result})
+  }
+  else
+  {
+    res.status(200).send({status: false, message: "No Such Flight Found"})
+  }
+  
 }

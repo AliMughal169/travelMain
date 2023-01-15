@@ -25,7 +25,7 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 // authentication middleware to get token
-app.use('/v1/admin',Auth.authenticate);
+//app.use('/v1/admin',Auth.authenticate);
 
 // mount admin api v1 routes
 app.use('/v1/admin', adminRoutes);

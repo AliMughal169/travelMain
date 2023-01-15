@@ -58,7 +58,9 @@ function Flight() {
 
          </form>
          <div className=' container '>
-    {flights?.map((data,index)=>{ 
+    {
+        
+    flights? flights.map((data,index)=>{ 
             return(
             <div key={index} className=" my-3 container-fluid  rounded shadow-lg d-flex justify-content-center align-content-center">
                 
@@ -91,7 +93,8 @@ function Flight() {
                 </div>
             </div>
             )
-        })
+        }):"dsfdfd"
+        
     }
     </div>
      </div>

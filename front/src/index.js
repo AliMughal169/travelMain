@@ -4,20 +4,23 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import 'bootstrap-css-only/css/bootstrap.min.css';
+import 'mdbreact/dist/css/mdb.css';
 import Auth from './layouts/Auth';
 import Home from './views/Home';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-    <Routes>
-    <Route path="/user/*"  element={ <Auth />} />
-    {/* <Route path="user/user/home"  element={ <Home />} /> */}
-     {/* <Route path="/unauth" render={(props) => <UnAuthLayout {...props} />} /> */}
-      {/* <Route path='/'  element={ <Auth />} /> */}
-    </Routes>
+      <Routes>
+        <Route path="/user/*" element={<Auth />} />
+        {/* <Route path="user/user/home"  element={ <Home />} /> */}
+        {/* <Route path="/unauth" render={(props) => <UnAuthLayout {...props} />} /> */}
+        {/* <Route path='/'  element={ <Auth />} /> */}
+      </Routes>
     </BrowserRouter>
-    
+
   </React.StrictMode>
 );
 

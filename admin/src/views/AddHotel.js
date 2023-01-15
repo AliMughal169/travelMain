@@ -40,7 +40,7 @@ function AddHotel({ show, setShow, data, setEdit, type }) {
 
         //setPostData(data)
 
-        //setPost(data)
+        //setPost(data) 
     })
     const handleChange = (event) => {
         postData[event.target.name] = event.target.value

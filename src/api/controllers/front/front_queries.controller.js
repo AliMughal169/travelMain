@@ -1,19 +1,21 @@
-const queries=require('../../models/query.model')
+const queries = require('../../models/query.model')
 
 
-exports.addQueries=async(req,res,next)=>{
+exports.addQueries = async (req, res, next) => {
+    const payload = req.body;
+    console.log(payload)
     try {
-        const payload = req.body;
-        if (!payload)
-        {
-            return res.status(200).send({status: false, message: "kindly enter Data for query"})
+
+        if (!payload) {
+            return res.status(200).send({ status: false, message: "kindly enter Data for query" })
         }
         console.log(payload)
-        let result = await Flight.create(payload);
-        res.status(200).send({status: true, message: "Flight Added Successfully",result})
-    
+        let result = await queries.create(payload);
+        res.status(200).send({ status: true, message: "Querie Added Successfully", result })
+
     } catch (error) {
-        res.status(200).send({status: false, message: "Some Error Occured", error})
-        next
+        res.status(200).send({ status: false, message: "Some Error Occured", error })
+        // next()
     }
 }
+

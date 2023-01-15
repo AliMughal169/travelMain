@@ -10,4 +10,4 @@ const passengerSchema=new mongoose.Schema({
     age:{type:Number, required:true},
 })
 
-module.exports=mongoose.model("Passenger",passengerSchema)
+module.exports=mongoose.model("passenger",passengerSchema)

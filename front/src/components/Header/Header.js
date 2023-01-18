@@ -1,15 +1,23 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Navbar,Nav } from 'react-bootstrap'
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Button } from 'reactstrap'
 import travel from '../../assets/img/travelLogo.png'
+import Login from '../../views/Login'
+
 function Header({routes}) {
   const location = useLocation();
+  const [basicModal, setBasicModal] = useState(false);
+
+  const toggleShow = () => setBasicModal(!basicModal);
+ 
   const activeRoute = (routeName) => {
     return location.pathname.indexOf(routeName) > -1 ? "active" : "";
   };
   return (
     <div className='  container-fluid  '>
+
+        {basicModal? <Login basicModal={basicModal} toggleShow={toggleShow} ></Login>:""}
          <Navbar bg="light">
         <Container>
           <Navbar.Brand href="#home"><img src={travel} width={"60px"}></img></Navbar.Brand>
@@ -41,7 +49,10 @@ function Header({routes}) {
             return null;
           })}
           </Nav>
-          <Button autoFocus >Login</Button>
+           <Button autoFocus onClick={(e)=>{
+              e.preventDefault()
+              toggleShow()
+           }} >Login</Button>
         </Container>
       </Navbar>
 

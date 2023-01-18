@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import routes from "../routes"
 import Header from '../components/Header/Header';
@@ -8,10 +8,13 @@ import Home from '../views/Home';
 import Flight from '../views/Flight';
 import Hotel from '../views/Hotel';
 import ContactUs from '../views/ContactUs';
+import Login from '../views/Login'
+import BookFlight from '../views/BookFlight';
 function Auth() {
+   
     const location=useLocation();
     const mainPanel=React.useRef(null);
-    
+    const [loginShow,setLogin]=useState('false');
     const getRoutes=(routes)=>{
         return routes.map((prop,key)=>{
             console.log(prop.layout)
@@ -52,6 +55,7 @@ function Auth() {
                 <Route path="/flights"  element={ <Flight />} />
                 <Route path="/hotels"  element={ <Hotel />} />
                 <Route path="/contactus"  element={ <ContactUs />} />
+                <Route path="/bookflight"  element={ <BookFlight/>} />
                      
                 </Routes>
             </div>

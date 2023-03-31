@@ -4,7 +4,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 const backendUrl = process.env.REACT_APP_BASE_URL;
 import AddHotel from './AddHotel'
-import NotificationAlert from "react-notification-alert";
 
 // react-bootstrap components
 import { Card, Table, Container, Row, Col, Button } from "react-bootstrap";

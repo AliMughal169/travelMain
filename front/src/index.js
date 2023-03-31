@@ -14,10 +14,10 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/user/*" element={<Auth />} />
-        {/* <Route path="user/user/home"  element={ <Home />} /> */}
+        <Route  path="/user/*" element={<Auth />} />
+       
         {/* <Route path="/unauth" render={(props) => <UnAuthLayout {...props} />} /> */}
-        {/* <Route path='/'  element={ <Auth />} /> */}
+        <Route path='/'  element={ <Auth />} />
       </Routes>
     </BrowserRouter>
 

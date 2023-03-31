@@ -51,7 +51,7 @@ function Auth() {
             <div className='content' >
                 
                 <Routes>
-                <Route path="/user/home"  element={ <Home />} />
+                <Route path="/home"  element={ <Home />} />
                 <Route path="/flights"  element={ <Flight />} />
                 <Route path="/hotels"  element={ <Hotel />} />
                 <Route path="/contactus"  element={ <ContactUs />} />

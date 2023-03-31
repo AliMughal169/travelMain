@@ -26,7 +26,7 @@ import Notifications from "views/Notifications.js";
 import TicketList from "views/TicketsList.js"
 import HotelList from "views/HotelList";
 import BookedHotels from "views/BookedHotels"
-
+import Queries from "views/Queries";
 const dashboardRoutes = [
   {
     path: "/login",
@@ -93,10 +93,10 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/typography",
-    name: "Typography",
-    icon: "nc-icon nc-paper-2",
-    component: Typography,
+    path: "/queries",
+    name: "Queries",
+    icon: "nc-icon nc-email-85",
+    component: Queries,
     showInSideBar: true,
     layout: "/admin"
   },

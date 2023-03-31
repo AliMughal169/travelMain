@@ -15,45 +15,86 @@ import Swal from "sweetalert2";
 import BookedDetails from "./BookedHotelDetails";
 import Notify from './notify'
 import NotificationAlert from "react-notification-alert";
+import { useHistory } from "react-router";
 
 function BookedHotels() {
+  const history = useHistory()
   const [show, setShow] = useState(false)
   const handleShow = () => setShow(true);
   const [notifyData, setnotifyData] = useState('');
   const [hotelDetail, setHotelDetail] = useState(false)
   const [reload, setReload] = useState(false)
   const [hotelData, setHotelData] = useState([]);
-
   const [guestData, setguestData] = useState([])
-  const [userId, setuserId] = useState('')
   const notificationAlertRef = React.useRef(null);
+  const [roomData, setroomData] = useState([]);
+  const [hotelList, setHotelList] = useState([]);
+  const [showOtherComponent, setShowOtherComponent] = useState(false);
 
-
-
+  function handleButtonClick() {
+    setShowOtherComponent(true);
+  }
+  var config = null;
   useEffect(() => {
-    // async function fetchHotelData() {
-    //   const response = await axios.get(`${backendUrl}v1/admin/hotelBookings/allBookedHotel`).then((res) => setHotelData(res.data.result));
-
-
-
-    // }
+    config = {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem("access_token")}`
+      }
+    }
+    async function fetchHotelData() {
+      const response = await axios.get(`${backendUrl}v1/admin/bookedHotels/allBookedHotel`, config).then((res) => {
+        if (res.data.message == "UnAuthorized") {
+          history.push('/unauth/login')
+        }
+        setHotelData(res.data.result)
+      });
+    }
+    async function fetchHotelList() {
+      const response = await axios.get(`${backendUrl}v1/admin/hotellist/allHotels`, config).then((res) => {
+        if (res.data.message == "UnAuthorized") {
+          history.push('/unauth/login')
+        }
+        setHotelList(res.data.result)
+      });
+    }
     async function fetchGuestData() {
-      const response = await axios.get(`${backendUrl}v1/admin/guests/guests`).then((res) => setguestData(res.data.result));
-      //console.log(guestData)
+      const response = await axios.get(`${backendUrl}v1/admin/guests/guests`, config).then((res) => {
+        if (res.data.message == "UnAuthorized") {
+          history.push('/unauth/login')
+        }
+        setguestData(res.data.result)
+      });
+      // console.log(hotelData)
 
 
 
     }
+    async function fetchRoomData() {
+      const response = await axios.get(`${backendUrl}v1/admin/rooms/allrooms`, config).then((res) => {
+        if (res.data.message == "UnAuthorized") {
+          history.push('/unauth/login')
+        }
+        setroomData(res.data.result)
+      });
+      // console.log(roomData)
+    }
 
-    //  fetchHotelData()
-    fetchGuestData()
-    // fetchRoomData()
+
+    fetchHotelData()
+    fetchGuestData();
+    fetchRoomData();
+    fetchHotelList();
+
 
 
   }, [reload])
 
   async function deleteGuest(id) {
-    const response = await axios.delete(`${backendUrl}v1/admin/guests/deleteGuest?_id=${id}`).then((res) => console.log(res))
+    const response = await axios.delete(`${backendUrl}v1/admin/guests/deleteGuest?_id=${id}`, config).then((res) => {
+      if (res.data.message == "UnAuthorized") {
+        history.push('/unauth/login')
+      }
+    })
     setReload(!reload)
     setnotifyData({ place: "tc", message: `deleted id : ${id} successfully`, type: "success" })
 
@@ -128,7 +169,7 @@ function BookedHotels() {
       }
       <NotificationAlert ref={notificationAlertRef} />
 
-      <BookedDetails show={show} setShow={setShow} hotelDetail={hotelDetail._id} />
+      {/* <BookedDetails show={show} setShow={setShow} hotelDetail={hotelDetail} roomData={roomData} hotelData={hotelData} /> */}
 
       <Container fluid>
         <Row>
@@ -167,7 +208,10 @@ function BookedHotels() {
                             <td>{data.phone}</td>
                             <td>{data.age}</td>
                             <td>{data.passport}</td>
-                            <td><Button variant='success' onClick={() => { detailClick(data) }}> Detail</Button></td>
+                            <td>
+                              <Button variant='success' onClick={() => { detailClick(data), handleButtonClick() }}> Detail</Button>
+                              {showOtherComponent && <BookedDetails show={show} setShow={setShow} hotelDetail={hotelDetail} roomData={roomData} hotelData={hotelData} hotelList={hotelList} />}
+                            </td>
                             <td><Button variant='danger' onClick={() => alerted(data._id)} > Delete</Button></td>
 
                           </tr>

@@ -4,7 +4,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 const backendUrl = process.env.REACT_APP_BASE_URL;
 import AddHotel from './AddHotel'
-import NotificationAlert from "react-notification-alert";
 
 // react-bootstrap components
 import { Card, Table, Container, Row, Col, Button } from "react-bootstrap";
@@ -17,14 +16,26 @@ function HotelList() {
     const handleShow = () => setShow(true);
     const [editData, setEditData] = useState("");
     const [refresh, setRefresh] = useState(false);
-    useEffect(() => {
+    var config=null;
+  useEffect(() => {
+    config= {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem("access_token")}`
+        }
+      }
         fetchPost();
     }, []);
 
     const fetchPost = async () => {
         const response = await axios
-            .get(`${backendUrl}v1/admin/hotellist/allHotels`)
-            .then((res) => setpost(res.data.result));
+            .get(`${backendUrl}v1/admin/hotellist/allHotels`,config)
+            .then((res) => {
+                if (res.data.message=="UnAuthorized")
+                {
+                    history.push('/unauth/login')
+                }
+                setpost(res.data.result)
+              });
 
         // setpost(response.data.collection);
         //console.log(post)
@@ -44,7 +55,7 @@ function HotelList() {
             }
         });
     }
-    function editflight(info) {
+    function editHotel(info) {
         //console.log(info)
         setEditData(info)
         setType('Save changes')
@@ -54,7 +65,12 @@ function HotelList() {
 
     async function Delete(lastId) {
         console.log(lastId)
-        let response = await axios.delete(`${backendUrl}v1/admin/hotellist/deleteHotel/?_id=${lastId}`).then((res) => console.log(res));
+        let response = await axios.delete(`${backendUrl}v1/admin/hotellist/deleteHotel/?_id=${lastId}`,config).then((res) => {
+            if (res.data.message=="UnAuthorized")
+            {
+                history.push('/unauth/login')
+            }
+          });
         //setRefresh(!refresh)
 
     }
@@ -105,7 +121,7 @@ function HotelList() {
                                                         <td>{data.totalRooms}</td>
                                                         <td>
                                                             {data.isFull ? (
-                                                                <p>Fully booked :{data.isFull}</p>
+                                                                <p>Fully booked </p>
                                                             ) : (
                                                                 <p>Available</p>
                                                             )}
@@ -115,7 +131,7 @@ function HotelList() {
                                                             <Button style={{ borderColor: "green" }}
                                                                 onClick={() => {
                                                                     //setType('Save changes')
-                                                                    editflight(data)
+                                                                    editHotel(data)
                                                                 }
                                                                 }>
 

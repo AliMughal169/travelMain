@@ -9,37 +9,42 @@ const backendUrl = process.env.REACT_APP_BASE_URL;
 
 
 function AddHotel({ show, setShow, data, setEdit, type }) {
-    // const [notifyData, setnotifyData] = useState('');
+    const editId = data._id
+
     const [refresh, setRefresh] = useState(false);
+    var postData =
+    {
 
-
-    const [post, setPost] = useState([])
-    //     _id: data._id,
-    //     hotelName: "",
-    //     address: "",
-    //     totalRooms: "",
-    //     stars: 0,
-    //     isFull: false,
-    // }
-
-    const [postData, setPostData] = useState([
-        {
-            _id: data._id,
-            hotelName: data.hotelName,
-            address: data.address,
-            totalRooms: data.totalRooms,
-            stars: data.stars,
-            isFull: data.isFull,
-        }
-    ])
+        hotelName: "",
+        address: '',
+        totalRooms: 0,
+        stars: 0,
+        isFull: false,
+    }
+    var config=null;
     useEffect(() => {
-        setPostData(data)
-        //setPost(data)
+      config= {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem("access_token")}`
+          }
+        }
+
+        if (data) {
+            //_id= data._id,
+            postData.hotelName = data.hotelName,
+                postData.address = data.address,
+                postData.totalRooms = data.totalRooms,
+                postData.stars = data.stars,
+                postData.isFull = data.isFull
+        }
+
+        //setPostData(data)
+
+        //setPost(data) 
     })
     const handleChange = (event) => {
-        console.log(postData._id)
         postData[event.target.name] = event.target.value
-
+        console.log(postData)
     }
 
 
@@ -53,38 +58,42 @@ function AddHotel({ show, setShow, data, setEdit, type }) {
         console.log(`id im add hote ${data._id}`)
         if (type == "Save changes") {
 
-            const res = await axios.put(`${backendUrl}v1/admin/hotellist/updateHotel?_id=${postData._id}`, {
+            const res = await axios.put(`${backendUrl}v1/admin/hotellist/updateHotel?_id=${editId}`, {
+
                 hotelName: postData.hotelName,
                 address: postData.address,
                 totalRooms: postData.totalRooms,
                 stars: postData.stars,
-                isFull: postData.isFull ? true : false
+                isFull: postData.isFull=="Full" ? true : false
 
-            }).then((res) => console.log(res))
+            },config).then((res) => {
+                if (res.data.message=="UnAuthorized")
+                {
+                    history.push('/unauth/login')
+                }
+              })
             console.log(postData._id, postData.hotelName, postData.address, postData.totalRooms, postData.stars, postData.isFull)
-            //setRefresh(!refresh)
-
-
 
         }
         else {
-            //console.log(postData)
-
             const response = await axios.post(`${backendUrl}v1/admin/hotellist/addHotel`,
                 {
-                    hotelName: post.hotelName,
-                    address: post.address,
-                    totalRooms: post.totalRooms,
-                    stars: post.stars,
-                    isFull: post.isFull ? 1 : 0
+                    hotelName: postData.hotelName,
+                    address: postData.address,
+                    totalRooms: postData.totalRooms,
+                    stars: postData.stars,
+                    isFull: postData.isFull=="Full" ? true : false
 
-                }).then((res) => console.log(res))
-            //setRefresh(!refresh)
-
+                },config).then((res) => {
+                    if (res.data.message=="UnAuthorized")
+                    {
+                        history.push('/unauth/login')
+                    }
+                  })
+            setRefresh(!refresh)
         }
-
         setEdit('');
-
+        setRefresh(!refresh);
     }
     return (
         <>
@@ -143,9 +152,10 @@ function AddHotel({ show, setShow, data, setEdit, type }) {
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                                 <Form.Label>Stars</Form.Label>
                                 <Form.Control
-                                    type="number" setRefresh
+                                    type="number" 
+                                    name='stars'
                                     defaultValue={data ? data.stars : ''}
-
+                                    onChange={handleChange}
                                     autoFocus
                                 />
                             </Form.Group>
